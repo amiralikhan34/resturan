@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: resturan
+    env: python
+    plan: free
+    runtime: python-3.13.5
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py migrate
+    startCommand: gunicorn resturant.wsgi
