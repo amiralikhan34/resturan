@@ -1212,38 +1212,38 @@
     </div>
 
     <script>
-        const BASE_API_URL = 'http://127.0.0.1:8000/api/'; // Your Django API base URL
+        const BASE_API_URL = 'https://rest.liara.run/api/'; // آدرس پایه API شما
 
-        // --- Helper Functions for API Calls ---
+        // --- توابع کمکی برای فراخوانی API ---
         async function fetchData(url) {
             try {
                 const response = await fetch(url);
                 if (!response.ok) {
-                    const errorText = await response.text(); // Get raw text to help debug
-                    throw new Error(`HTTP error! Status: ${response.status}, Details: ${errorText}`);
+                    const errorText = await response.text(); // برای کمک به دیباگ، متن خام خطا را دریافت کنید
+                    throw new Error(`خطای HTTP! وضعیت: ${response.status}, جزئیات: ${errorText}`);
                 }
                 return await response.json();
             } catch (error) {
-                console.error(`Error fetching from ${url}:`, error);
+                console.error(`خطا در دریافت داده از ${url}:`, error);
                 alert(`خطا در بارگذاری داده‌ها از سرور: ${error.message}`);
                 return null;
             }
         }
 
-        // Helper for getting CSRF token from meta tag
+        // تابع کمکی برای دریافت توکن CSRF از متا تگ
         function getCsrfToken() {
             const meta = document.querySelector('meta[name="csrf-token"]');
             if (meta) {
                 return meta.getAttribute('content');
             }
-            return null; // Return null if not found
+            return null; // اگر یافت نشد، null برگردانید
         }
 
         async function postData(url, data) {
             const csrftoken = getCsrfToken(); // دریافت توکن CSRF
             if (!csrftoken) {
-                console.error('CSRF token not found. Aborting POST request.');
-                alert('خطا: CSRF token یافت نشد. نمی‌توان داده را ارسال کرد. لطفاً صفحه را رفرش کنید.');
+                console.error('توکن CSRF یافت نشد. درخواست POST لغو شد.');
+                alert('خطا: توکن CSRF یافت نشد. نمی‌توان داده را ارسال کرد. لطفاً صفحه را رفرش کنید.');
                 return null;
             }
             try {
@@ -1257,11 +1257,11 @@
                 });
                 if (!response.ok) {
                     const errorData = await response.json();
-                    throw new Error(`HTTP error! Status: ${response.status}, Details: ${JSON.stringify(errorData)}`);
+                    throw new Error(`خطای HTTP! وضعیت: ${response.status}, جزئیات: ${JSON.stringify(errorData)}`);
                 }
                 return await response.json();
             } catch (error) {
-                console.error(`Error posting to ${url}:`, error);
+                console.error(`خطا در ارسال داده به ${url}:`, error);
                 alert(`خطا در ارسال داده به سرور: ${error.message}`);
                 return null;
             }
@@ -1270,8 +1270,8 @@
         async function deleteData(url) {
             const csrftoken = getCsrfToken(); // دریافت توکن CSRF
             if (!csrftoken) {
-                console.error('CSRF token not found. Aborting DELETE request.');
-                alert('خطا: CSRF token یافت نشد. نمی‌توان داده را حذف کرد. لطفاً صفحه را رفرش کنید.');
+                console.error('توکن CSRF یافت نشد. درخواست DELETE لغو شد.');
+                alert('خطا: توکن CSRF یافت نشد. نمی‌توان داده را حذف کرد. لطفاً صفحه را رفرش کنید.');
                 return null;
             }
             try {
@@ -1283,11 +1283,11 @@
                 });
                 if (!response.ok) {
                     const errorText = await response.text();
-                    throw new Error(`HTTP error! Status: ${response.status}, Details: ${errorText}`);
+                    throw new Error(`خطای HTTP! وضعیت: ${response.status}, جزئیات: ${errorText}`);
                 }
                 return true;
             } catch (error) {
-                console.error(`Error deleting from ${url}:`, error);
+                console.error(`خطا در حذف داده از ${url}:`, error);
                 alert(`خطا در حذف داده از سرور: ${error.message}`);
                 return false;
             }
@@ -1296,8 +1296,8 @@
         async function putData(url, data) {
             const csrftoken = getCsrfToken(); // دریافت توکن CSRF
             if (!csrftoken) {
-                console.error('CSRF token not found. Aborting PUT request.');
-                alert('خطا: CSRF token یافت نشد. نمی‌توان داده را به‌روزرسانی کرد. لطفاً صفحه را رفرش کنید.');
+                console.error('توکن CSRF یافت نشد. درخواست PUT لغو شد.');
+                alert('خطا: توکن CSRF یافت نشد. نمی‌توان داده را به‌روزرسانی کرد. لطفاً صفحه را رفرش کنید.');
                 return null;
             }
             try {
@@ -1311,18 +1311,18 @@
                 });
                 if (!response.ok) {
                     const errorData = await response.json();
-                    throw new Error(`HTTP error! Status: ${response.status}, Details: ${JSON.stringify(errorData)}`);
+                    throw new Error(`خطای HTTP! وضعیت: ${response.status}, جزئیات: ${JSON.stringify(errorData)}`);
                 }
                 return await response.json();
             } catch (error) {
-                console.error(`Error updating data to ${url}:`, error);
+                console.error(`خطا در به‌روزرسانی داده به ${url}:`, error);
                 alert(`خطا در به‌روزرسانی داده: ${error.message}`);
                 return null;
             }
         }
 
 
-        // --- UI Navigation and Rendering Functions ---
+        // --- توابع ناوبری و رندر UI ---
         const sidebarLinks = document.querySelectorAll('.sidebar-menu a');
         const contentSections = document.querySelectorAll('.content-section');
 
@@ -1336,7 +1336,7 @@
             }
             document.getElementById(sectionId).classList.add('active');
 
-            // Load data specific to the section
+            // بارگذاری داده‌های مربوط به هر بخش
             if (sectionId === 'dashboard') {
                 loadDashboardData();
             } else if (sectionId === 'food-list') {
@@ -1355,7 +1355,7 @@
             showSection('add-new-raw-material');
         }
 
-        // --- Dashboard Data Loading & Rendering ---
+        // --- بارگذاری و رندر داده‌های داشبورد ---
         async function loadDashboardData() {
             const data = await fetchData(`${BASE_API_URL}dashboard-stats/`);
             if (!data) return;
@@ -1364,13 +1364,13 @@
             document.getElementById('dashboard-total-raw-materials').textContent = data.total_raw_materials;
             document.getElementById('dashboard-total-foods').textContent = data.total_foods;
 
-            // Render Dashboard Food Table (simplified, shows actual foods)
+            // رندر جدول غذاهای داشبورد (ساده شده، غذاهای واقعی را نمایش می‌دهد)
             const foods = await fetchData(`${BASE_API_URL}foods/`);
             if (foods) {
                 renderDashboardFoodTable(foods);
             }
 
-            // Render Kabob Structure
+            // رندر ساختار کباب
             const kabobStructureList = document.getElementById('kabobStructureList');
             kabobStructureList.innerHTML = '';
             if (data.example_food_structure && data.example_food_structure.length > 0) {
@@ -1385,11 +1385,11 @@
             }
 
 
-            // Render Top Consumed Materials
+            // رندر مواد اولیه پرمصرف
             const topConsumedMaterialsList = document.getElementById('topConsumedMaterialsList');
             topConsumedMaterialsList.innerHTML = '';
             if (data.top_consumed_materials) {
-                const colors = ['#c8e6c9', '#ffccbc', '#fff9c4']; // Example colors
+                const colors = ['#c8e6c9', '#ffccbc', '#fff9c4']; // رنگ‌های نمونه
                 data.top_consumed_materials.forEach((item, index) => {
                     const div = document.createElement('div');
                     div.classList.add('material-item');
@@ -1405,7 +1405,7 @@
             }
 
 
-            // Render Stock Status
+            // رندر وضعیت موجودی
             const stockStatusList = document.getElementById('stockStatusList');
             stockStatusList.innerHTML = '';
             if (data.stock_status) {
@@ -1433,10 +1433,10 @@
             }
         }
 
-        // Helper for rendering food table on Dashboard
+        // تابع کمکی برای رندر جدول غذا در داشبورد
         function renderDashboardFoodTable(foods) {
             const tbody = document.querySelector('#dashboardFoodTable tbody');
-            tbody.innerHTML = ''; // Clear existing rows
+            tbody.innerHTML = ''; // پاک کردن ردیف‌های موجود
 
             if (foods && foods.length > 0) {
                 foods.forEach(food => {
@@ -1451,8 +1451,8 @@
                             <button class="delete-btn" data-food-id="${food.id}"><i class="fas fa-trash-alt"></i></button>
                         </td>
                     `;
-                    // Add event listeners for edit/delete buttons if needed here (for dashboard table)
-                    // For now, these are illustrative and primarily for the main food-list section
+                    // افزودن Event Listener برای دکمه‌های ویرایش/حذف در صورت نیاز (برای جدول داشبورد)
+                    // در حال حاضر، اینها صرفاً برای بخش اصلی لیست غذاها هستند.
                 });
             } else {
                 const row = tbody.insertRow();
@@ -1461,7 +1461,7 @@
         }
 
 
-        // --- Food List Data Loading & Rendering ---
+        // --- بارگذاری و رندر داده‌های لیست غذا ---
         async function loadFoodListData(categoryId = '', searchQuery = '') {
             let url = `${BASE_API_URL}foods/`;
             const params = new URLSearchParams();
@@ -1473,7 +1473,7 @@
             if (!foods) return;
 
             const foodListCardsContainer = document.getElementById('foodListCardsContainer');
-            foodListCardsContainer.innerHTML = ''; // Clear existing cards
+            foodListCardsContainer.innerHTML = ''; // پاک کردن کارت‌های موجود
 
             if (foods.length > 0) {
                 foods.forEach(food => {
@@ -1496,7 +1496,7 @@
                     `;
                     foodListCardsContainer.appendChild(card);
 
-                    // Add event listeners for edit and delete buttons
+                    // افزودن Event Listener برای دکمه‌های ویرایش و حذف
                     card.querySelector('.edit-btn').addEventListener('click', () => editFood(food.id));
                     card.querySelector('.delete-btn').addEventListener('click', () => deleteFood(food.id, food.name));
                 });
@@ -1507,10 +1507,10 @@
 
         async function editFood(foodId) {
             alert(`ویرایش غذا با ID: ${foodId} (این قابلیت هنوز پیاده سازی نشده و نیاز به بارگذاری فرم با داده ها دارد)`);
-            // In a real app:
-            // 1. Fetch food details: await fetchData(`${BASE_API_URL}foods/${foodId}/`);
-            // 2. Populate the 'add-new-food' form with these details.
-            // 3. Change 'save' button to 'update' button logic.
+            // در یک برنامه واقعی:
+            // 1. جزئیات غذا را دریافت کنید: await fetchData(`${BASE_API_URL}foods/${foodId}/`);
+            // 2. فرم 'add-new-food' را با این جزئیات پر کنید.
+            // 3. منطق دکمه 'ذخیره' را به 'به‌روزرسانی' تغییر دهید.
             // 4. showSection('add-new-food');
         }
 
@@ -1519,12 +1519,12 @@
                 const success = await deleteData(`${BASE_API_URL}foods/${foodId}/`);
                 if (success) {
                     alert(`غذای "${foodName}" با موفقیت حذف شد.`);
-                    loadFoodListData(); // Reload the list after deletion
+                    loadFoodListData(); // بارگذاری مجدد لیست پس از حذف
                 }
             }
         }
 
-        // --- Raw Material List Data Loading & Rendering ---
+        // --- بارگذاری و رندر داده‌های لیست مواد اولیه ---
         async function loadRawMaterialListData(categoryId = '', searchQuery = '') {
             let url = `${BASE_API_URL}raw-materials/`;
             const params = new URLSearchParams();
@@ -1536,7 +1536,7 @@
             if (!rawMaterials) return;
 
             const rawMaterialListCardsContainer = document.getElementById('rawMaterialListCardsContainer');
-            rawMaterialListCardsContainer.innerHTML = ''; // Clear existing cards
+            rawMaterialListCardsContainer.innerHTML = ''; // پاک کردن کارت‌های موجود
 
             if (rawMaterials.length > 0) {
                 rawMaterials.forEach(material => {
@@ -1559,7 +1559,7 @@
                     `;
                     rawMaterialListCardsContainer.appendChild(card);
 
-                    // Add event listeners for edit and delete buttons
+                    // افزودن Event Listener برای دکمه‌های ویرایش و حذف
                     card.querySelector('.edit-btn').addEventListener('click', () => editRawMaterial(material.id));
                     card.querySelector('.delete-btn').addEventListener('click', () => deleteRawMaterial(material.id, material.name));
                 });
@@ -1570,10 +1570,10 @@
 
         async function editRawMaterial(rawMaterialId) {
             alert(`ویرایش ماده اولیه با ID: ${rawMaterialId} (این قابلیت هنوز پیاده سازی نشده و نیاز به بارگذاری فرم با داده ها دارد)`);
-            // In a real app:
-            // 1. Fetch raw material details: await fetchData(`${BASE_API_URL}raw-materials/${rawMaterialId}/`);
-            // 2. Populate the 'add-new-raw-material' form with these details.
-            // 3. Change 'save' button to 'update' button logic.
+            // در یک برنامه واقعی:
+            // 1. جزئیات ماده اولیه را دریافت کنید: await fetchData(`${BASE_API_URL}raw-materials/${rawMaterialId}/`);
+            // 2. فرم 'add-new-raw-material' را با این جزئیات پر کنید.
+            // 3. منطق دکمه 'ذخیره' را به 'به‌روزرسانی' تغییر دهید.
             // 4. showSection('add-new-raw-material');
         }
 
@@ -1582,22 +1582,22 @@
                 const success = await deleteData(`${BASE_API_URL}raw-materials/${rawMaterialId}/`);
                 if (success) {
                     alert(`ماده اولیه "${rawMaterialName}" با موفقیت حذف شد.`);
-                    loadRawMaterialListData(); // Reload the list after deletion
-                    loadDashboardData(); // Update dashboard stats as well
+                    loadRawMaterialListData(); // بارگذاری مجدد لیست پس از حذف
+                    loadDashboardData(); // آمار داشبورد را نیز به‌روزرسانی کنید
                 }
             }
         }
 
-        // --- Dashboard Charts (Raw Material Section) ---
+        // --- نمودارهای داشبورد (بخش مدیریت مواد اولیه) ---
         async function loadDashboardCharts() {
             const data = await fetchData(`${BASE_API_URL}dashboard-stats/`);
             if (!data) return;
 
-            // Render Top Consumed Materials (same as dashboard, could be a shared function)
+            // رندر مواد اولیه پرمصرف (همانند داشبورد، می‌تواند یک تابع مشترک باشد)
             const rawMaterialTopConsumedList = document.getElementById('rawMaterialTopConsumedList');
             rawMaterialTopConsumedList.innerHTML = '';
             if (data.top_consumed_materials) {
-                const colors = ['#c8e6c9', '#ffccbc', '#fff9c4']; // Example colors
+                const colors = ['#c8e6c9', '#ffccbc', '#fff9c4']; // رنگ‌های نمونه
                 data.top_consumed_materials.forEach((item, index) => {
                     const div = document.createElement('div');
                     div.classList.add('material-item');
@@ -1612,7 +1612,7 @@
                 rawMaterialTopConsumedList.innerHTML = '<p>اطلاعات مواد اولیه پرمصرف موجود نیست.</p>';
             }
 
-            // Render Stock Status (same as dashboard)
+            // رندر وضعیت موجودی (همانند داشبورد)
             const rawMaterialStockStatusList = document.getElementById('rawMaterialStockStatusList');
             rawMaterialStockStatusList.innerHTML = '';
             if (data.stock_status) {
@@ -1640,7 +1640,7 @@
             }
         }
 
-        // --- Form Population Functions (Categories, Sizes, Raw Materials) ---
+        // --- توابع پر کردن فرم (دسته‌بندی‌ها، سایزها، مواد اولیه) ---
         async function populateCategories(selectElementId, defaultOptionText = 'یک دسته‌بندی را انتخاب کنید') {
             const selectElement = document.getElementById(selectElementId);
             if (!selectElement) return;
@@ -1665,7 +1665,7 @@
 
         async function populateRawMaterialFormDropdowns() {
             await populateCategories('rawMaterialCategory', 'یک دسته‌بندی ماده اولیه را انتخاب کنید');
-            // Unit dropdown is static, no need to fetch
+            // دراپ‌داون واحد اندازه‌گیری ثابت است و نیازی به دریافت از API ندارد
         }
 
         async function populateSizesForCheckboxes(containerId) {
@@ -1675,7 +1675,7 @@
             const sizes = await fetchData(`${BASE_API_URL}size-options/`);
             if (!sizes) return;
 
-            container.innerHTML = ''; // Clear existing checkboxes
+            container.innerHTML = ''; // پاک کردن چک‌باکس‌های موجود
             sizes.forEach(size => {
                 const label = document.createElement('label');
                 label.innerHTML = `<input type="checkbox" name="foodSize" value="${size.id}"> ${size.name}`;
@@ -1684,21 +1684,21 @@
         }
 
         async function populateRawMaterialsForFoodForm() {
-            // This function populates the dropdowns for raw materials when adding a new one to a food
-            // It gets all available raw materials from the API
+            // این تابع دراپ‌داون‌های مواد اولیه را هنگام افزودن ماده اولیه جدید به غذا پر می‌کند
+            // تمام مواد اولیه موجود را از API دریافت می‌کند
             const rawMaterials = await fetchData(`${BASE_API_URL}raw-materials/`);
             if (!rawMaterials) return;
 
-            // Store raw materials globally or pass around if needed for dynamic updates
+            // مواد اولیه را به صورت سراسری ذخیره کنید یا در صورت نیاز برای به‌روزرسانی‌های پویا منتقل کنید
             window.allRawMaterials = rawMaterials;
         }
 
-        // --- Event Listeners and Form Submission Logic ---
+        // --- Event Listenerها و منطق ارسال فرم ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Initial section display (will also trigger data load)
+            // نمایش بخش اولیه (همچنین باعث بارگذاری داده‌ها می‌شود)
             showSection('dashboard');
 
-            // Add event listeners for sidebar navigation
+            // افزودن Event Listener برای ناوبری نوار کناری
             sidebarLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -1707,7 +1707,7 @@
                 });
             });
 
-            // --- Food List Filters ---
+            // --- فیلترهای لیست غذا ---
             const foodListCategoryFilter = document.getElementById('foodListCategoryFilter');
             const foodListSearchInput = document.getElementById('foodListSearchInput');
 
@@ -1724,7 +1724,7 @@
             }
 
 
-            // --- Raw Material List Filters ---
+            // --- فیلترهای لیست مواد اولیه ---
             const rawMaterialListCategoryFilter = document.getElementById('rawMaterialListCategoryFilter');
             const rawMaterialListSearchInput = document.getElementById('rawMaterialListSearchInput');
 
@@ -1741,7 +1741,7 @@
             }
 
 
-            // --- Add New Food Form Logic ---
+            // --- منطق فرم افزودن غذای جدید ---
             const addFoodMaterialBtn = document.getElementById('addFoodMaterialBtn');
             const foodMaterialsList = document.getElementById('foodMaterialsList');
             const saveFoodBtn = document.getElementById('saveFoodBtn');
@@ -1777,19 +1777,19 @@
                     `;
                     foodMaterialsList.appendChild(newMaterialRow);
 
-                    // Populate the new raw material dropdown
+                    // پر کردن دراپ‌داون ماده اولیه جدید
                     const select = newMaterialRow.querySelector('.raw-material-select');
                     const unitDisplay = newMaterialRow.querySelector('.raw-material-unit-display');
                     if (window.allRawMaterials) {
                         window.allRawMaterials.forEach(rm => {
                             const option = document.createElement('option');
-                            option.value = rm.id; // Use ID for backend
+                            option.value = rm.id; // استفاده از ID برای بک‌اند
                             option.textContent = rm.name;
                             select.appendChild(option);
                         });
                     }
 
-                    // Update unit display when raw material changes
+                    // به‌روزرسانی نمایش واحد اندازه‌گیری هنگام تغییر ماده اولیه
                     select.addEventListener('change', (e) => {
                         const selectedRawMaterialId = e.target.value;
                         const selectedRawMaterial = window.allRawMaterials.find(rm => rm.id == selectedRawMaterialId);
@@ -1800,7 +1800,7 @@
                         }
                     });
 
-                    // Add event listener to the new delete button
+                    // افزودن Event Listener به دکمه حذف جدید
                     newMaterialRow.querySelector('.delete-material-btn').addEventListener('click', (e) => {
                         e.currentTarget.closest('.material-row').remove();
                     });
@@ -1814,7 +1814,7 @@
                     const foodDescription = document.getElementById('foodDescription').value;
 
                     const selectedSizes = Array.from(document.querySelectorAll('#foodSizeCheckboxes input[name="foodSize"]:checked'))
-                                            .map(cb => parseInt(cb.value)); // Get IDs as integers
+                                            .map(cb => parseInt(cb.value)); // دریافت IDها به صورت عدد صحیح
 
                     const foodRawMaterials = [];
                     document.querySelectorAll('#foodMaterialsList .material-row').forEach(row => {
@@ -1847,19 +1847,19 @@
                     const result = await postData(`${BASE_API_URL}foods/`, newFoodData);
                     if (result) {
                         alert('غذای جدید با موفقیت ذخیره شد!');
-                        // Clear form or navigate
+                        // پاک کردن فرم یا ناوبری
                         document.getElementById('foodName').value = '';
-                        document.getElementById('foodCategory').value = ''; // Reset dropdown
+                        document.getElementById('foodCategory').value = ''; // ریست کردن دراپ‌داون
                         document.getElementById('foodDescription').value = '';
                         document.querySelectorAll('#foodSizeCheckboxes input[name="foodSize"]:checked').forEach(cb => cb.checked = false);
-                        document.getElementById('foodMaterialsList').innerHTML = ''; // Clear raw materials list
-                        showSection('food-list'); // Go back to food list
+                        document.getElementById('foodMaterialsList').innerHTML = ''; // پاک کردن لیست مواد اولیه
+                        showSection('food-list'); // بازگشت به لیست غذا
                     }
                 });
             }
 
 
-            // --- Add New Raw Material Form Logic ---
+            // --- منطق فرم افزودن ماده اولیه جدید ---
             const saveRawMaterialBtn = document.getElementById('saveRawMaterialBtn');
             if (saveRawMaterialBtn) {
                 saveRawMaterialBtn.addEventListener('click', async () => {
@@ -1885,19 +1885,19 @@
                     const result = await postData(`${BASE_API_URL}raw-materials/`, newRawMaterialData);
                     if (result) {
                         alert('ماده اولیه جدید با موفقیت ذخیره شد!');
-                        // Clear form or navigate
+                        // پاک کردن فرم یا ناوبری
                         document.getElementById('rawMaterialName').value = '';
                         document.getElementById('rawMaterialCategory').value = '';
                         document.getElementById('rawMaterialUnit').value = 'gram';
                         document.getElementById('rawMaterialStock').value = '0';
                         document.getElementById('rawMaterialDescription').value = '';
-                        showSection('raw-material-management'); // Go back to raw material list
+                        showSection('raw-material-management'); // بازگشت به لیست مواد اولیه
                     }
                 });
             }
         });
 
-        // --- Helper for Tag Classes (as you have custom classes for tags) ---
+        // --- تابع کمکی برای کلاس‌های تگ (چون کلاس‌های سفارشی برای تگ‌ها دارید) ---
         function getCategoryTagClass(categoryName) {
             const lowerCaseName = categoryName ? categoryName.toLowerCase() : '';
             if (lowerCaseName.includes('ایرانی')) return 'iranian';
@@ -1907,7 +1907,7 @@
             if (lowerCaseName.includes('روغن') || lowerCaseName.includes('چربی')) return 'oil';
             if (lowerCaseName.includes('سبزیجات')) return 'vegetables';
             if (lowerCaseName.includes('ادویه')) return 'spices';
-            return ''; // Default or no special class
+            return ''; // پیش‌فرض یا بدون کلاس خاص
         }
     </script>
 </body>
