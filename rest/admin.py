@@ -1,61 +1,156 @@
-# restaurant_app/admin.py
-
 from django.contrib import admin
-from .models import Category, RawMaterial, Food, FoodRawMaterial, SizeOption
+from django.db import models
 
+from .models import (
+    Category, RawMaterial, SizeOption, Food, FoodRawMaterial, FoodBOMItem,
+    WeeklyProgram, KitchenTask, KitchenInventoryItem, WarehouseInventoryItem,
+    loginToAddFoodPage, WeeklySchedule, Coupon, loginToCupon, rwmat, servedfood, loginTokitchen,
+    # مطمئن شوید که تمام مدل‌ها در فایل models.py شما وجود دارند.
+)
+
+from django_jalali.db import models as jmodels
+
+from jalali_date.admin import ModelAdminJalaliMixin
+from jalali_date.widgets import AdminJalaliDateWidget
+
+
+# ---------- Category ----------
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
+    ordering = ('name',)
+
 
 @admin.register(SizeOption)
 class SizeOptionAdmin(admin.ModelAdmin):
     list_display = ('name',)
-    search_fields = ('name',)
+    ordering = ('id',)
+
 
 @admin.register(RawMaterial)
 class RawMaterialAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'unit_of_measurement', 'current_stock', 'foods_related_count')
+    # 'unit_price' جایگزین 'current_stock' شد.
+    list_display = ('name', 'category', 'unit_of_measurement', 'unit_price', 'foods_count')
     list_filter = ('category', 'unit_of_measurement')
     search_fields = ('name', 'description')
     ordering = ('name',)
-    actions = ['add_stock'] # Example custom admin action
 
-    def foods_related_count(self, obj):
-        # This will call the method defined in the RawMaterialSerializer for consistency
+    def foods_count(self, obj):
         return obj.foodrawmaterial_set.values('food').distinct().count()
-    foods_related_count.short_description = 'تعداد غذاهای مرتبط'
 
-    # Example custom admin action: Add stock to selected raw materials
-    def add_stock(self, request, queryset):
-        # For simplicity, let's just add 10 to current_stock for selected items
-        # In a real app, you'd likely want a form for quantity input
-        for raw_material in queryset:
-            raw_material.current_stock += 10
-            raw_material.save()
-        self.message_user(request, f"{queryset.count()} ماده اولیه با موفقیت به‌روز شد.")
-    add_stock.short_description = "افزودن ۱۰ واحد به موجودی انتخاب شده"
+    foods_count.short_description = "تعداد غذاهای مرتبط"
+
+    # اکشن مربوط به افزایش موجودی (stock) حذف شد، زیرا فیلد آن در مدل وجود ندارد.
+    # actions = ['increase_stock_by_10']
 
 
 class FoodRawMaterialInline(admin.TabularInline):
     model = FoodRawMaterial
-    extra = 1 # Number of empty forms to display
-    raw_id_fields = ('raw_material',) # Use a raw ID input for raw_material for better performance with many items
-    # You might want to prefetch related raw materials if you enable custom form fields for better display in inline
+    extra = 1
+    raw_id_fields = ('raw_material',)
+
+
+# کلاس FoodBOMItemInline حذف شد، چون فیلد آن در مدل Food نیست.
+# اگر این مدل‌ها همچنان در پروژه شما وجود دارند اما ارتباطشان با Food قطع شده، این کلاس‌ها باید جداگانه مدیریت شوند.
+
 
 @admin.register(Food)
 class FoodAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'get_available_sizes_display', 'get_raw_materials_count')
-    list_filter = ('category',)
+    # نمایش فیلدهای جدید مدل
+    list_display = ('name', 'category', 'food_type', 'preparation_time_minutes', 'raw_materials_count')
     search_fields = ('name', 'description')
-    filter_horizontal = ('available_sizes',) # Nice widget for ManyToMany
-    inlines = [FoodRawMaterialInline] # Allows managing raw materials directly from Food admin
+
+    # فیلتر کردن بر اساس فیلدهای جدید
+    list_filter = ('category', 'food_type')
+
     ordering = ('name',)
+    inlines = [FoodRawMaterialInline]
 
-    def get_available_sizes_display(self, obj):
-        return ", ".join([size.name for size in obj.available_sizes.all()])
-    get_available_sizes_display.short_description = 'سایزهای موجود'
-
-    def get_raw_materials_count(self, obj):
+    # متدهای مربوط به نمایش فیلدهای حذف‌شده حذف شدند.
+    def raw_materials_count(self, obj):
         return obj.foodrawmaterial_set.count()
-    get_raw_materials_count.short_description = 'تعداد مواد اولیه'
+
+    raw_materials_count.short_description = "تعداد مواد اولیه"
+
+
+@admin.register(KitchenInventoryItem)
+class KitchenInventoryItemAdmin(admin.ModelAdmin):
+    list_display = ('raw_material', 'quantity', 'location')
+    list_filter = ('location',)
+    search_fields = ('raw_material__name',)
+    ordering = ('raw_material__name',)
+
+
+@admin.register(loginToAddFoodPage)
+class LoginToAddFoodPageAdmin(admin.ModelAdmin):
+    list_display = ('username',)
+    search_fields = ('username',)
+
+
+admin.site.register(loginToCupon)
+admin.site.register(rwmat)
+admin.site.register(servedfood)
+admin.site.register(KitchenTask)
+admin.site.register(WarehouseInventoryItem)
+admin.site.register(WeeklyProgram)
+admin.site.register(loginTokitchen)
+
+
+@admin.register(Coupon)
+class CouponAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
+    list_display = ('coupon_code', 'food', 'family_name', 'phone_number', 'count', 'issue_date', 'is_used')
+    list_filter = ('issue_date', 'food', 'is_used')
+    search_fields = ('coupon_code', 'family_name', 'phone_number', 'food__name')
+    readonly_fields = ('coupon_code', 'issue_date', 'is_used')
+    list_select_related = ('food',)
+    jalali_date_fields = ('issue_date',)
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        if isinstance(db_field, jmodels.jDateTimeField):
+            kwargs['widget'] = AdminJalaliDateWidget
+        return super().formfield_for_dbfield(db_field, **kwargs)
+
+
+@admin.register(WeeklySchedule)
+class WeeklyScheduleAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
+    list_display = (
+        'food',
+        'schedule_date',
+        'meal_time',
+        'capacity_nazry',
+        'capacity_foroshi',
+        'cooking_amount',
+    )
+    readonly_fields = (
+        'cooking_amount',
+    )
+    fields = (
+        'food',
+        'schedule_date',
+        'meal_time',
+        'cooking_amount',
+        'capacity_nazry',
+        'capacity_foroshi',
+        'is_finished',
+    )
+    list_filter = (
+        'schedule_date',
+        'meal_time',
+        'food__name',
+    )
+    search_fields = (
+        'food__name',
+        'schedule_date',
+        'meal_time'
+    )
+    list_select_related = ('food',)
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        if isinstance(db_field, jmodels.jDateField):
+            kwargs['widget'] = AdminJalaliDateWidget
+        elif isinstance(db_field, jmodels.jDateTimeField):
+            kwargs['widget'] = AdminJalaliDateWidget
+        return super().formfield_for_dbfield(db_field, **kwargs)
+
+    jalali_date_fields = ('schedule_date',)

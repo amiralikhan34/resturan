@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>گزارش برنامه - {{ base_food.name }}</title>
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            text-align: right;
+            direction: rtl;
+            line-height: 1.8;
+            color: #333;
+        }
+        .container {
+            padding: 20px;
+            border: 1px solid #eee;
+            width: 95%;
+            margin: auto;
+        }
+        h1, h2 {
+            color: #ff8c00;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+        .info-item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .info-item strong { color: #555; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: right;
+        }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>گزارش برنامه غذایی</h1>
+
+        <div class="info-grid">
+            <div class="info-item"><strong>نام غذا:</strong> {{ base_food.name|default:"ثبت نشده" }}</div>
+            <div class="info-item"><strong>تاریخ:</strong> {{ food_jalali_date }}</div>
+            <div class="info-item"><strong>وعده:</strong> {{ food_schedule.get_meal_time_display }}</div>
+            <div class="info-item"><strong>مقدار طبخ:</strong> {{ food_schedule.cooking_amount|default:"-" }} پرس</div>
+        </div>
+
+        <h2>لیست مواد اولیه مورد نیاز (BOM)</h2>
+        {% if bom_materials %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>نام ماده</th>
+                        <th>مقدار مورد نیاز</th>
+                        <th>واحد</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in bom_materials %}
+                    <tr>
+                        <td>{{ item.raw_material.name }}</td>
+                        <td>{{ item.quantity_needed }}</td>
+                        <td>{{ item.raw_material.get_unit_of_measurement_display }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>مواد اولیه‌ای برای این غذا ثبت نشده است.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

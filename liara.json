@@ -1,6 +1,13 @@
 {
-  "app": "rest",
-  "port": 80
-
-
+  "app": "rest1",
+  "port": 80,
+  "build": {
+    "location": "iran"
+  },
+  "disks": [
+    {
+      "name": "database",
+      "mountTo": "database"
+    }
+  ]
 }

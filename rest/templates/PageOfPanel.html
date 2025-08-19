@@ -1,0 +1,220 @@
+{% load static %}
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل جامع مدیریت رستوران</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: url("{% static 'bg1.png' %}");
+
+            color: #333;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: rgb(247 140 0);;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        /* Header */
+        h1 {
+            color: #ffffff;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            line-height: 1.4;
+        }
+
+        /* Grid Layout for Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: rgb(255 255 255); /* DarkOrange */
+            color: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            min-height: 150px;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-icon {
+            width: 100px;
+        }
+
+        .card-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color:rgb(0 0 0);
+        }
+
+        .card-description {
+            font-size: 0.9em;
+            opacity: 0.9;
+            line-height: 1.5;
+            color:rgb(247 140 0);
+
+        }
+
+
+        .card-icon.plus {
+            width: 100px;
+        }
+
+
+         .card-icon.chef {
+                width: 100px;
+         }
+
+
+
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #ffffff;
+        }
+
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+                margin-bottom: 30px;
+            }
+
+            .container {
+                padding: 30px;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr; /* Stack cards on smaller screens */
+                gap: 20px;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .card-icon {
+                font-size: 2.5em;
+            }
+
+            .card-icon.plus {
+                font-size: 3.5em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8em;
+                margin-bottom: 25px;
+            }
+
+            .container {
+                padding: 20px;
+                border-radius: 15px;
+            }
+
+            .card {
+                padding: 20px;
+                min-height: 130px;
+            }
+
+            .card-icon {
+                font-size: 2.2em;
+            }
+
+            .card-icon.plus {
+                font-size: 3em;
+            }
+
+            .card-title {
+                font-size: 1.2em;
+            }
+
+            .card-description {
+                font-size: 0.8em;
+            }
+
+            .footer {
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <h1>
+            <img src="{% static 'lgo.png' %}" alt="لوگو" style="width: 40px; vertical-align: middle; margin-left: 10px;">
+            به سامانه یکپارچه مدیریت طبخ و توزیع غذا در آستان حضرت زینب(س) خوش آمدید
+        </h1>
+
+        <div class="card-grid">
+            <a href="api/logintokitchen" class="card">
+                <img class="card-icon chef" src="{% static 'chf.png' %}">
+                <div class="card-title">ورود به پنل آشپزخانه</div>
+                <div class="card-description">مدیریت سفارشات و آشپزخانه</div>
+            </a>
+
+            <a href="api/loginToAddFood" class="card">
+                <img class="card-icon plus" src="{% static 'ghaza.png' %}">
+                <div style="font-size: 19px;" class="card-title"> ورود به پنل مدیریت رستوران</div>
+                <div class="card-description">افزودن و مدیریت منوی غذایی</div>
+            </a>
+
+            <a href="/admin" class="card">
+                <img class="card-icon" src="{% static 'admin.png' %}">
+                <div class="card-title">ورود به پنل مدیریت</div>
+                <div class="card-description">مدیریت کامل رستوران و گزارش‌گیری</div>
+            </a>
+
+            <a href="logintotahvil/" class="card">
+                <img class="card-icon" src="{% static 'tahvil.png' %}">
+                <div class="card-title">ورود به پنل تحویل غذا</div>
+                <div class="card-description">مدیریت تحویل و ارسال سفارشات</div>
+            </a>
+
+            <a href="api/loginToCupon/" class="card">
+                <img class="card-icon" src="{% static 'jeton.png' %}">
+                <div class="card-title">ورود به پنل صدور ژتون</div>
+                <div class="card-description">صدور و مدیریت ژتون‌های غذا</div>
+            </a>
+        </div>
+
+        <div class="footer">
+            © تمامی حقوق محفوظ است - سیستم مدیریت رستوران
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل صدور ژتون</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            margin: 0;
+            background-color: #f0f2f5;
+            direction: rtl;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        * {
+            font-family: 'Vazirmatn', sans-serif;
+            box-sizing: border-box;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #fff;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #eee;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding-bottom: 30px;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #5c6bc0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: #555;
+            transition: background-color 0.2s, color 0.2s;
+            font-weight: 500;
+        }
+
+        .sidebar-menu a i {
+            margin-left: 15px;
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-menu a.active,
+        .sidebar-menu a:hover {
+            background-color: #e8eaf6;
+            color: #3f51b5;
+            border-right: 3px solid #3f51b5;
+        }
+
+        .main-content-wrapper {
+            flex-grow: 1;
+            overflow-x: hidden;
+        }
+
+        .main-content {
+            padding: 30px;
+            display: none;
+        }
+
+        .main-content.active {
+            display: block;
+        }
+
+        .main-header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            font-size: 22px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+            font-size: 15px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #5c6bc0;
+            box-shadow: 0 0 0 3px rgba(92, 107, 192, 0.2);
+            outline: none;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .form-actions button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #5c6bc0;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #3f51b5;
+            transform: translateY(-2px);
+        }
+
+        .food-entry {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .food-entry .form-group {
+            margin-bottom: 0;
+            flex-grow: 1;
+        }
+
+        .food-entry input[type="number"] {
+            width: 80px;
+            flex-grow: 0;
+        }
+
+        .food-entry .remove-food-btn {
+            background-color: #ef5350;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            flex-shrink: 0;
+            transition: background-color 0.2s;
+        }
+        .food-entry .remove-food-btn:hover { background-color: #d32f2f; }
+
+        #add-food-btn { background-color: #42a5f5; }
+        #add-food-btn:hover { background-color: #1e88e5; }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+        .dashboard-stat-item p {
+            margin: 0 0 10px 0;
+            color: #666;
+            font-size: 16px;
+        }
+        .dashboard-stat-item h2 {
+            margin: 0;
+            font-size: 32px;
+            color: #3f51b5;
+        }
+
+        #message-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .message-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .message-box.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .message-error { background-color: #ffe0e0; color: #d32f2f; }
+        .message-success { background-color: #e6ffe6; color: #388e3c; }
+
+        /* Styles for Weekly Program */
+        .week-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .day-card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .day-header {
+            background-color: #5c6bc0;
+            color: #fff;
+            padding: 15px 20px;
+            font-size: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
+        .day-body { padding: 10px 20px 20px 20px; flex-grow: 1; }
+        .food-item-in-schedule {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .food-item-in-schedule:last-child { border-bottom: none; }
+        .food-item-in-schedule .food-name { font-weight: 500; color: #333; }
+        .food-item-in-schedule .food-capacity {
+            font-weight: 600;
+            color: #3f51b5;
+            background-color: #e8eaf6;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+        .no-food-message { color: #888; text-align: center; padding: 20px; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">پنل مدیریت</div>
+            <nav class="sidebar-menu">
+                <ul>
+                    <li><a href="#" class="sidebar-link active" data-section="dashboard-section"><i class="fas fa-tachometer-alt"></i> داشبورد</a></li>
+                    <li><a href="#" class="sidebar-link" data-section="issue-coupon-section"><i class="fas fa-ticket-alt"></i> صدور ژتون</a></li>
+                    <li><a href="#" class="sidebar-link" data-section="weekly-program-section"><i class="fas fa-calendar-alt"></i> برنامه هفتگی</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content-wrapper">
+            <section id="dashboard-section" class="main-content">
+                <header class="main-header"><h1>داشبورد</h1></header>
+                <div class="card">
+                    <div class="card-header">بررسی ظرفیت روزانه</div>
+                    <div class="form-group">
+                        <label for="dashboardDateInput">یک تاریخ برای بررسی انتخاب کنید:</label>
+                        <input type="text" id="dashboardDateInput" data-jdp placeholder="تاریخ را انتخاب کنید" readonly style="background:#fff;cursor:pointer; max-width: 300px;">
+                        <input type="hidden" id="dashboardDateInputGregorian">
+                    </div>
+                    <div id="dashboardCapacityResult" class="dashboard-stats" style="display:none;">
+                        <div class="dashboard-stat-item">
+                            <p>ظرفیت کل</p>
+                            <h2 id="dashboard-selected-total">0</h2>
+                        </div>
+                        <div class="dashboard-stat-item">
+                            <p>ظرفیت باقی‌مانده</p>
+                            <h2 id="dashboard-selected-remaining">0</h2>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <section id="issue-coupon-section" class="main-content">
+                <header class="main-header"><h1>صدور ژتون</h1></header>
+                <div id="message-container"></div>
+                <div class="card">
+                    <div class="card-header">صدور ژتون جدید</div>
+                    <form id="issueCouponForm">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="issueDateInput">تاریخ صدور ژتون:</label>
+                            <input type="text" id="issueDateInput" data-jdp placeholder="تاریخ را انتخاب کنید" required readonly style="background:#fff;cursor:pointer;">
+                            <input type="hidden" id="issueDateInputGregorian">
+                        </div>
+                        <hr style="margin: 25px 0; border: 1px solid #f0f0f0;">
+                        <label style="font-weight: 500; display: block; margin-bottom: 15px;">لیست غذاها:</label>
+                        <div id="food-list-container"></div>
+                        <button type="button" class="btn-primary" id="add-food-btn" style="margin-top: 10px;"><i class="fas fa-plus"></i> افزودن ردیف غذا</button>
+                        <hr style="margin: 25px 0; border: 1px solid #f0f0f0;">
+                        <div class="form-group">
+                            <label for="familyName">نام و نام خانوادگی:</label>
+                            <input type="text" id="familyName" name="family_name" placeholder="نام و نام خانوادگی را وارد کنید" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phoneNumber">شماره تماس:</label>
+                            <input type="text" id="phoneNumber" name="phone_number" placeholder="شماره تماس را وارد کنید" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary" id="issueCouponSubmitBtn">صدور ژتون</button>
+                        </div>
+                    </form>
+                </div>
+                <table class="table table-striped mt-4">
+                    <thead>
+                      <tr>
+                        <th>غذا</th>
+                        <th>نام و نام خانوادگی</th>
+                        <th>تعداد</th>
+                        <th>تاریخ</th>
+                        <th>ژتون</th>
+                        <th>عملیات</th> </tr>
+                    </thead>
+                    <tbody id="coupons-table-body"> {% for item in cupon %}
+                      <tr data-tracking-code="{{ item.tracking_code }}">
+                        <td>{{ item.food.name }}</td>
+                        <td>{{ item.family_name }}</td>
+                        <td>{{ item.count }}</td>
+                        <td>{{ item.issue_date|date:"Y/m/d" }}</td>
+                        <td>{{ item.tracking_code }}</td>
+                        <td>
+                         <a href="{% url 'print_receipt' item.tracking_code %}" class="btn btn-sm btn-info" target="_blank">
+                              <i class="fas fa-print"></i> چاپ
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="weekly-program-section" class="main-content">
+                <header class="main-header"><h1>برنامه هفتگی غذا</h1></header>
+                <div id="weekly-program-container" class="week-view">
+                    <p>در حال بارگذاری برنامه هفتگی...</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/jalali-moment/dist/jalali-moment.browser.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.js"></script>
+
+ <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const BASE_API_URL = '/api/';
+        let availableFoodsCache = [];
+
+        // --- UTILITY FUNCTIONS ---
+        async function fetchData(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    console.error(`HTTP Error! Status: ${response.status} from ${url}`);
+                    return null;
+                }
+                return await response.json();
+            } catch (error) {
+                console.error(`Fetch Error from ${url}:`, error);
+                return null;
+            }
+        }
+
+        function getCsrfToken() {
+            return document.querySelector('[name=csrfmiddlewaretoken]').value;
+        }
+
+        function showMessage(text, type = 'success') {
+            const container = document.getElementById('message-container');
+            if (!container) return;
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message-box message-${type}`;
+            messageDiv.textContent = text;
+            container.appendChild(messageDiv);
+            setTimeout(() => messageDiv.classList.add('show'), 10);
+            setTimeout(() => {
+                messageDiv.classList.remove('show');
+                messageDiv.addEventListener('transitionend', () => messageDiv.remove());
+            }, 5000);
+        }
+
+        // --- DATA LOADING FUNCTIONS ---
+        async function loadDashboardStats() {
+            const data = await fetchData(`${BASE_API_URL}dashboard-data/`);
+            if (!data) return;
+            document.getElementById('dashboard-issued-count').textContent = data.issued_coupons_today_count || 0;
+            document.getElementById('dashboard-total-capacity').textContent = data.total_nazry_capacity_today || 0;
+            document.getElementById('dashboard-remaining-capacity').textContent = Math.max(0, data.remaining_nazry_capacity);
+        }
+
+        async function fetchCapacityForDate(dateStr) {
+            const resultDiv = document.getElementById('dashboardCapacityResult');
+            const totalEl = document.getElementById('dashboard-selected-total');
+            const remainingEl = document.getElementById('dashboard-selected-remaining');
+            if (!dateStr) {
+                resultDiv.style.display = 'none';
+                return;
+            }
+            resultDiv.style.display = 'grid';
+            totalEl.textContent = '...';
+            remainingEl.textContent = '...';
+            const data = await fetchData(`${BASE_API_URL}capacity-by-date/?date=${dateStr}`);
+            if (data) {
+                totalEl.textContent = data.total_capacity || 0;
+                remainingEl.textContent = data.remaining_capacity || 0;
+            } else {
+                totalEl.textContent = 'خطا';
+                remainingEl.textContent = 'خطا';
+            }
+        }
+
+        async function loadAvailableFoodsForDate() {
+            const selectedDate = document.getElementById('issueDateInputGregorian').value;
+            const foodContainer = document.getElementById('food-list-container');
+            foodContainer.innerHTML = ''; // Clear previous entries
+            addFoodEntry(); // Add a fresh entry
+
+            if (!selectedDate) {
+                availableFoodsCache = [];
+                updateFoodOptions();
+                return;
+            }
+            const data = await fetchData(`${BASE_API_URL}available-foods/?date=${selectedDate}`);
+            availableFoodsCache = (data && Array.isArray(data)) ? data : [];
+            updateFoodOptions();
+        }
+
+        async function loadWeeklyProgram() {
+            const container = document.getElementById('weekly-program-container');
+            container.innerHTML = '<p>در حال بارگذاری برنامه هفتگی...</p>';
+            const data = await fetchData(`${BASE_API_URL}weekly-program/`);
+            if (!data) {
+                container.innerHTML = '<p>خطا در دریافت اطلاعات برنامه هفتگی.</p>';
+                return;
+            }
+            container.innerHTML = '';
+            const daysOrder = ["شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه"];
+            daysOrder.forEach(dayName => {
+                const foodsForDay = data[dayName] || [];
+                const dayCard = document.createElement('div');
+                dayCard.className = 'day-card';
+                let dayBodyHtml = '';
+                if (foodsForDay.length > 0) {
+                    foodsForDay.forEach(food => {
+                        dayBodyHtml += `<div class="food-item-in-schedule"><span class="food-name">${food.name}</span><span class="food-capacity">ظرفیت: ${food.capacity_nazry}</span></div>`;
+                    });
+                } else {
+                    dayBodyHtml = '<p class="no-food-message">غذایی برای این روز ثبت نشده است.</p>';
+                }
+                dayCard.innerHTML = `<div class="day-header">${dayName}</div><div class="day-body">${dayBodyHtml}</div>`;
+                container.appendChild(dayCard);
+            });
+        }
+
+        // --- DOM MANIPULATION (REFACTORED) ---
+
+        function updateFoodOptions() {
+            // 1. Calculate total current usage on the form
+            const usageMap = {};
+            document.querySelectorAll('.food-entry').forEach(entry => {
+                const foodId = entry.querySelector('.food-item-select').value;
+                const count = parseInt(entry.querySelector('.food-item-count').value, 10) || 0;
+                if (foodId && count > 0) {
+                    usageMap[foodId] = (usageMap[foodId] || 0) + count;
+                }
+            });
+
+            // 2. Update each dropdown based on the usage map
+            document.querySelectorAll('.food-entry').forEach(entry => {
+                const selectElement = entry.querySelector('.food-item-select');
+                const countInput = entry.querySelector('.food-item-count');
+                const currentSelectedValue = selectElement.value;
+                const currentCount = parseInt(countInput.value, 10) || 0;
+
+                // Temporarily store the selected value
+                const selectedValue = selectElement.value;
+
+                // Clear existing options
+                selectElement.innerHTML = '';
+                selectElement.add(new Option('غذا را انتخاب کنید', ''));
+                selectElement.options[0].disabled = true;
+
+                if (availableFoodsCache.length === 0) {
+                     selectElement.add(new Option('غذایی برای تاریخ انتخابی یافت نشد', ''));
+                     selectElement.options[1].disabled = true;
+                }
+
+                availableFoodsCache.forEach(food => {
+                    const usedByOthers = (usageMap[food.id] || 0) - (food.id == currentSelectedValue ? currentCount : 0);
+                    const effectiveRemaining = food.remaining_nazry_capacity - usedByOthers;
+
+                    // An item is available if its effective capacity is > 0,
+                    // OR if it's the item currently selected in this very dropdown.
+                    if (effectiveRemaining > 0 || food.id == currentSelectedValue) {
+                        const optionText = `${food.name} [باقی‌مانده: ${effectiveRemaining}]`;
+                        const option = new Option(optionText, food.id);
+                        selectElement.add(option);
+                    }
+                });
+
+                // Restore the selection
+                selectElement.value = selectedValue;
+
+                // Also update the max attribute of the number input
+                if(currentSelectedValue) {
+                    const selectedFoodInCache = availableFoodsCache.find(f => f.id == currentSelectedValue);
+                    if (selectedFoodInCache) {
+                        const usedByOthers = (usageMap[currentSelectedValue] || 0) - currentCount;
+                        const maxAllowed = selectedFoodInCache.remaining_nazry_capacity - usedByOthers;
+                        countInput.max = maxAllowed;
+                    }
+                } else {
+                    countInput.removeAttribute('max');
+                }
+            });
+        }
+
+
+        function addFoodEntry() {
+            const container = document.getElementById('food-list-container');
+            const newEntry = document.createElement('div');
+            newEntry.className = 'food-entry';
+            newEntry.innerHTML = `
+                <div class="form-group" style="flex-grow: 1;">
+                    <select class="food-item-select" required><option value="">ابتدا تاریخ را انتخاب کنید</option></select>
+                </div>
+                <div class="form-group">
+                    <input type="number" class="food-item-count" value="1" min="1" required placeholder="تعداد">
+                </div>
+                <button type="button" class="remove-food-btn"><i class="fas fa-trash"></i></button>`;
+
+            newEntry.querySelector('.remove-food-btn').addEventListener('click', () => {
+                newEntry.remove();
+                updateFoodOptions();
+            });
+
+            container.appendChild(newEntry);
+            updateFoodOptions();
+        }
+
+        // --- INITIALIZATION & EVENT LISTENERS ---
+        function showSection(sectionId) {
+            document.querySelectorAll('.sidebar-link').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll('.main-content').forEach(section => section.classList.remove('active'));
+
+            document.getElementById(sectionId)?.classList.add('active');
+            document.querySelector(`.sidebar-link[data-section="${sectionId}"]`)?.classList.add('active');
+
+            if (sectionId === 'dashboard-section') loadDashboardStats();
+            else if (sectionId === 'weekly-program-section') loadWeeklyProgram();
+            else if (sectionId === 'issue-coupon-section') {
+                if(document.getElementById('food-list-container').children.length === 0){
+                    loadAvailableFoodsForDate();
+                }
+            }
+        }
+
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                showSection(e.currentTarget.dataset.section);
+            });
+        });
+
+        jalaliDatepicker.startWatch({
+            persianDigits: true, autoHide: true, showTodayBtn: true, showCloseBtn: true
+        });
+
+        const issueDateInput = document.getElementById('issueDateInput');
+        const issueDateGregorianInput = document.getElementById('issueDateInputGregorian');
+        const dashboardDateInput = document.getElementById('dashboardDateInput');
+
+        const todayJalali = moment().format('jYYYY/jMM/jDD');
+        const todayGregorian = moment().format('YYYY-MM-DD');
+
+        issueDateInput.value = todayJalali;
+        issueDateGregorianInput.value = todayGregorian;
+        dashboardDateInput.value = todayJalali;
+
+        issueDateInput.addEventListener('change', () => {
+            issueDateGregorianInput.value = issueDateInput.value ? moment.from(issueDateInput.value, 'fa', 'jYYYY/jMM/jDD').format('YYYY-MM-DD') : '';
+            loadAvailableFoodsForDate();
+        });
+
+        dashboardDateInput.addEventListener('change', () => {
+            const jalaliDate = dashboardDateInput.value;
+            const gregorianDate = jalaliDate ? moment.from(jalaliDate, 'fa', 'jYYYY/jMM/jDD').format('YYYY-MM-DD') : '';
+            fetchCapacityForDate(gregorianDate);
+        });
+
+        document.getElementById('add-food-btn')?.addEventListener('click', addFoodEntry);
+
+        // Event delegation for food item changes
+        document.getElementById('food-list-container').addEventListener('change', (e) => {
+            if (e.target.classList.contains('food-item-select')) {
+                 const entry = e.target.closest('.food-entry');
+                // When food is changed, reset count to 1 and update everything
+                entry.querySelector('.food-item-count').value = 1;
+                updateFoodOptions();
+            }
+        });
+
+        document.getElementById('food-list-container').addEventListener('input', (e) => {
+            if (e.target.classList.contains('food-item-count')) {
+                // When count is changed, just update options
+                updateFoodOptions();
+            }
+        });
+
+
+        document.getElementById('issueCouponForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const submitBtn = form.querySelector('#issueCouponSubmitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'در حال صدور...';
+
+            const formData = {
+                family_name: document.getElementById('familyName').value,
+                phone_number: document.getElementById('phoneNumber').value,
+                issue_date: document.getElementById('issueDateInputGregorian').value,
+                items: []
+            };
+
+            let hasError = false;
+            document.querySelectorAll('.food-entry').forEach(entry => {
+                const foodSelect = entry.querySelector('.food-item-select');
+                const countInput = entry.querySelector('.food-item-count');
+                const count = parseInt(countInput.value, 10);
+                if (foodSelect.value && count > 0) {
+                    // Check if requested count exceeds available capacity
+                    const maxAllowed = parseInt(countInput.max, 10);
+                    if (!isNaN(maxAllowed) && count > maxAllowed) {
+                        showMessage(`تعداد درخواستی برای ${foodSelect.options[foodSelect.selectedIndex].text.split('[')[0].trim()} بیشتر از حد مجاز است.`, 'error');
+                        hasError = true;
+                    }
+                    formData.items.push({ food_id: foodSelect.value, count: count });
+                }
+            });
+
+            if (formData.items.length === 0) {
+                 hasError = true;
+                 showMessage('حداقل یک ردیف غذا باید ثبت شود.', 'error');
+            }
+
+            if (hasError) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'صدور ژتون';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${BASE_API_URL}issue-multi-coupon/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
+                    body: JSON.stringify(formData)
+                });
+                const result = await response.json();
+
+                if (response.ok) {
+                    showMessage(`ژتون با موفقیت صادر شد. ژتون:: ${result.tracking_code}`, 'success');
+                    form.reset();
+                    document.getElementById('issueDateInput').value = todayJalali;
+                    document.getElementById('issueDateInputGregorian').value = todayGregorian;
+                    document.getElementById('food-list-container').innerHTML = '';
+                    loadAvailableFoodsForDate();
+                    loadDashboardStats();
+                } else {
+                    const errorMessage = Object.values(result).flat().join('\n') || 'خطایی در سرور رخ داد.';
+                    showMessage(errorMessage, 'error');
+                }
+            } catch (error) {
+                showMessage('خطا در ارتباط با سرور. لطفاً اتصال اینترنت خود را بررسی کنید.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'صدور ژتون';
+            }
+        });
+
+        // Initial Load
+        showSection('dashboard-section');
+        fetchCapacityForDate(todayGregorian);
+    });
+</script>
+</body>
+</html>

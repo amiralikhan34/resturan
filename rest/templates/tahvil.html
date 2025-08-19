@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل تحویل غذا</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Styling */
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            margin: 0;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            direction: rtl; /* Right-to-left for Farsi */
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #cb2228;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+
+        /* Header (Logout Button) */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .logout-button {
+            background-color: #cb2228;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .logout-button:hover {
+            background-color: #a01a20;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            background-color: #fcebeb;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-title {
+            color: #cb2228;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-cards {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 15px 20px;
+            text-align: center;
+            width: 200px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card img {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            margin: 5px 0;
+            font-size: 0.95em;
+            color: #555;
+        }
+
+        .card .value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Specific card colors */
+        .card.green { border: 2px solid #a8e6cf; }
+        .card.green .value { color: #28a745; }
+        .card.yellow { border: 2px solid #ffd3b5; }
+        .card.yellow .value { color: #ffc107; }
+        .card.pink { border: 2px solid #ffadad; }
+        .card.pink .value { color: #dc3545; }
+        .card.red { border: 2px solid #ff7b7b; }
+        .card.red .value { color: #cb2228; }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            background-color: #f7f7f7;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tab-button {
+            flex-grow: 1;
+            padding: 15px 20px;
+            border: none;
+            background-color: #f0f0f0;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            color: #666;
+        }
+
+        .tab-button:first-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+        .tab-button:last-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+
+        .tab-button.active {
+            background-color: #cb2228;
+            color: #fff;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-content {
+            background-color: #fcebeb;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .panel {
+            display: none;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        .panel h3 {
+            color: #cb2228;
+            font-size: 1.3em;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group label {
+            flex: 0 0 120px;
+            font-weight: bold;
+            color: #555;
+            text-align: right; /* Align labels to the right in RTL */
+            margin-left: 15px; /* Space between label and input */
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group select {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            color: #333;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="number"]:focus,
+        .form-group select:focus {
+            border-color: #cb2228;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .quantity-control button {
+            background-color: #cb2228;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .quantity-control button:hover {
+            background-color: #a01a20;
+        }
+
+        .quantity-control input {
+            width: 60px;
+            text-align: center;
+            margin: 0 10px;
+            -moz-appearance: textfield; /* Remove arrows from number input in Firefox */
+        }
+
+        .quantity-control input::-webkit-outer-spin-button,
+        .quantity-control input::-webkit-inner-spin-button {
+            -webkit-appearance: none; /* Remove arrows from number input in Chrome, Safari, Edge */
+            margin: 0;
+        }
+
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #cb2228;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 25px;
+        }
+
+        .submit-button:hover {
+            background-color: #a01a20;
+        }
+
+        .search-button {
+            background-color: #cb2228;
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 15px;
+            display: block;
+            width: fit-content;
+            margin-right: auto; /* Push to the right in RTL */
+        }
+
+        .search-button:hover {
+            background-color: #a01a20;
+        }
+
+        .token-info {
+            background-color: #fff;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .token-info h3 {
+            color: #cb2228;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .token-info .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .token-info .info-item {
+            flex: 1;
+            min-width: 250px;
+            display: flex;
+            align-items: center;
+        }
+
+        .token-info .info-item label {
+            font-weight: bold;
+            color: #555;
+            margin-left: 10px;
+        }
+
+        .token-info .info-item span {
+            color: #333;
+            font-size: 1.1em;
+            flex-grow: 1;
+        }
+
+        .confirm-button {
+            margin-top: 30px;
+        }
+
+        /* Recent Activities */
+        .recent-activities {
+            background-color: #fcebeb;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .recent-activities h3 {
+            color: #cb2228;
+            font-size: 1.3em;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        #activities-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #activities-table th,
+        #activities-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+            font-size: 0.95em;
+        }
+
+        #activities-table th {
+            background-color: #cb2228;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        #activities-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        #activities-table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-content.success { border-top: 5px solid #28a745; }
+        .modal-content.error { border-top: 5px solid #ffc107; }
+
+        .modal-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .modal-content.success .modal-icon { color: #28a745; }
+        .modal-content.error .modal-icon { color: #ffc107; }
+
+        .modal-content p {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .close-modal-button {
+            background-color: #cb2228;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .close-modal-button:hover {
+            background-color: #a01a20;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 15px;
+            left: 25px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #333;
+            text-decoration: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .dashboard-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card {
+                width: 80%;
+                max-width: 250px;
+            }
+
+            .form-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .form-group label {
+                margin-bottom: 8px;
+                text-align: right;
+                width: 100%;
+            }
+
+            .form-group input,
+            .form-group select,
+            .quantity-control {
+                width: 100%;
+            }
+
+            .token-info .info-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>پنل تحویل غذا</h1>
+            <a href="#" id="logoutButton" class="logout-button">خروج</a>
+        </div>
+
+        <div class="dashboard">
+            <h2 class="dashboard-title">داشبورد</h2>
+            <div class="dashboard-cards">
+                <div class="card green">
+                    <p>فروش مستقیم امروز</p>
+                    <p class="value" id="today-direct-sales">0 پرس</p>
+                </div>
+                <div class="card yellow">
+                    <p>تحویل ژتونی امروز</p>
+                    <p class="value" id="today-token-deliveries">0 پرس</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" id="direct-sale-tab">فروش مستقیم</button>
+            <button class="tab-button" id="token-delivery-tab">تحویل با ژتون</button>
+        </div>
+
+        <div class="tab-content">
+            <div id="direct-sale-panel" class="panel active">
+                <h3>فروش مستقیم</h3>
+                <div class="form-group">
+                    <label for="ds-customer-name">نام و نام خانوادگی:</label>
+                    <input type="text" id="ds-customer-name" placeholder="نام مشتری را وارد کنید">
+                </div>
+                <div class="form-group">
+                    <label for="ds-phone-number">شماره تماس:</label>
+                    <input type="text" id="ds-phone-number" placeholder="شماره تماس را وارد کنید">
+                </div>
+                <div class="form-group">
+                    <label for="ds-food-type">نوع غذا:</label>
+                    <select id="ds-food-type">
+                        <option value="">انتخاب کنید</option>
+                        </select>
+                </div>
+                <div class="form-group">
+                    <label for="ds-quantity">تعداد غذا:</label>
+                    <div class="quantity-control">
+                        <button id="ds-quantity-minus">-</button>
+                        <input type="number" id="ds-quantity" value="1" min="1">
+                        <button id="ds-quantity-plus">+</button>
+                    </div>
+                </div>
+                <button class="submit-button" id="register-direct-sale">ثبت فروش</button>
+            </div>
+
+            <div id="token-delivery-panel" class="panel">
+                <h3>تحویل با ژتون</h3>
+                <div class="form-group">
+                    <label for="token-number">شماره ژتون:</label>
+                    <input type="text" id="token-number" placeholder="شماره ژتون را وارد کنید">
+                </div>
+                <button class="search-button" id="search-token">جستجو</button>
+
+                <div class="token-info" id="token-details-section" style="display: none;">
+                    <h3>اطلاعات ژتون</h3>
+                    <div class="info-row">
+                        <div class="info-item">
+                            <label>نام و نام خانوادگی:</label>
+                            <span id="td-customer-name"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>شماره تماس:</label>
+                            <span id="td-phone-number"></span>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-item">
+                            <label>نوع غذا:</label>
+                            <span id="td-food-type"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>تعداد غذا:</label>
+                            <span id="td-quantity"></span>
+                        </div>
+                    </div>
+                    <button class="submit-button confirm-button" id="confirm-token-delivery">تایید تحویل</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="recent-activities">
+            <h3>فعالیت‌های اخیر</h3>
+            <table id="activities-table">
+                <thead>
+                    <tr>
+                        <th>زمان</th>
+                        <th>نام مشتری</th>
+                        <th>نوع غذا</th>
+                        <th>تعداد</th>
+                        <th>نوع تراکنش</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="success-modal" class="modal">
+        <div class="modal-content success">
+            <span class="close-button">&times;</span>
+            <div class="modal-icon">&#10003;</div>
+            <p id="success-message"></p>
+            <button class="close-modal-button">بستن</button>
+        </div>
+    </div>
+
+    <div id="error-modal" class="modal">
+        <div class="modal-content error">
+            <span class="close-button">&times;</span>
+            <div class="modal-icon">&#9888;</div>
+            <p id="error-message"></p>
+            <button class="close-modal-button">بستن</button>
+        </div>
+    </div>
+
+<script>
+        // JavaScript Logic for Frontend to interact with Django Backend
+        document.addEventListener('DOMContentLoaded', () => {
+            // **تنظیم آدرس API جنگو شما**
+            const BASE_API_URL = 'https://panelresturant.ir/api';
+
+            // --- عناصر DOM ---
+            const dashboardElements = {
+                todayDirectSales: document.getElementById('today-direct-sales'),
+                todayTokenDeliveries: document.getElementById('today-token-deliveries'),
+                remainingSaleCapacity: document.getElementById('remaining-sale-capacity'),
+                remainingInPersonCapacity: document.getElementById('remaining-inperson-capacity'),
+            };
+
+            const tabs = {
+                directSaleTab: document.getElementById('direct-sale-tab'),
+                tokenDeliveryTab: document.getElementById('token-delivery-tab'),
+                directSalePanel: document.getElementById('direct-sale-panel'),
+                tokenDeliveryPanel: document.getElementById('token-delivery-panel'),
+            };
+
+            const directSaleForm = {
+                customerName: document.getElementById('ds-customer-name'),
+                phoneNumber: document.getElementById('ds-phone-number'),
+                foodType: document.getElementById('ds-food-type'),
+                quantityInput: document.getElementById('ds-quantity'),
+                quantityMinus: document.getElementById('ds-quantity-minus'),
+                quantityPlus: document.getElementById('ds-quantity-plus'),
+                registerButton: document.getElementById('register-direct-sale'),
+            };
+
+            const tokenDeliveryForm = {
+                tokenNumberInput: document.getElementById('token-number'),
+                searchButton: document.getElementById('search-token'),
+                detailsSection: document.getElementById('token-details-section'),
+                customerName: document.getElementById('td-customer-name'),
+                phoneNumber: document.getElementById('td-phone-number'),
+                foodType: document.getElementById('td-food-type'),
+                quantity: document.getElementById('td-quantity'),
+                confirmButton: document.getElementById('confirm-token-delivery'),
+                currentCouponCode: null
+            };
+
+            const activitiesTableBody = document.querySelector('#activities-table tbody');
+
+            const successModal = document.getElementById('success-modal');
+            const errorMessage = document.getElementById('error-message');
+            const successMessage = document.getElementById('success-message');
+            const errorModal = document.getElementById('error-modal');
+            const closeButtons = document.querySelectorAll('.close-button, .close-modal-button');
+            const logoutButton = document.getElementById('logoutButton');
+
+
+            // --- توابع کاربردی ---
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            const CSRF_TOKEN = getCookie('csrftoken');
+
+
+            async function fetchData(url) {
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({ error: 'پاسخ سرور نامعتبر است.' }));
+                        throw new Error(errorData.error || `خطای HTTP! وضعیت: ${response.status}`);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error('خطا در دریافت اطلاعات:', error);
+                    showModal('error', `خطا در دریافت اطلاعات: ${error.message}`);
+                    throw error;
+                }
+            }
+
+            async function postData(url, data) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': CSRF_TOKEN,
+                        },
+                        body: JSON.stringify(data),
+                    });
+                    const responseData = await response.json().catch(() => {
+                        return response.text().then(text => ({ error: `پاسخ غیر JSON از سرور: ${text}` }));
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(responseData.error || 'خطا در عملیات!');
+                    }
+                    return responseData;
+                } catch (error) {
+                    console.error('خطا در ارسال اطلاعات:', error);
+                    showModal('error', `خطا در ارسال اطلاعات: ${error.message}`);
+                    throw error;
+                }
+            }
+
+            async function updateDashboard() {
+                try {
+                    const dashboardData = await fetchData(`${BASE_API_URL}/dashboard/`);
+                    dashboardElements.todayDirectSales.textContent = `${dashboardData.today_direct_sales_count} پرس`;
+                    dashboardElements.todayTokenDeliveries.textContent = `${dashboardData.today_token_deliveries_count} پرس`;
+                    dashboardElements.remainingSaleCapacity.textContent = `${dashboardData.remaining_sale_capacity} پرس`;
+                    dashboardElements.remainingInPersonCapacity.textContent = `${dashboardData.remaining_in_person_capacity} پرس`;
+                } catch (error) {
+                    console.error('خطا در به‌روزرسانی داشبورد:', error);
+                }
+            }
+
+            async function loadFoodItems() {
+                try {
+                    const foodItemsWithCapacity = await fetchData(`${BASE_API_URL}/food-items/`);
+                    directSaleForm.foodType.innerHTML = '<option value="">انتخاب کنید</option>';
+
+                    if (foodItemsWithCapacity && foodItemsWithCapacity.length > 0) {
+                        foodItemsWithCapacity.forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item.id;
+                            option.textContent = `${item.name} [باقی‌مانده: ${item.remaining_foroshi_capacity} پرس]`;
+                            option.dataset.remainingCapacity = item.remaining_foroshi_capacity;
+
+                            if (item.remaining_foroshi_capacity <= 0) {
+                                option.disabled = true;
+                                option.textContent += ' (ظرفیت تکمیل)';
+                            }
+                            directSaleForm.foodType.appendChild(option);
+                        });
+                    } else {
+                        const option = document.createElement('option');
+                        option.value = "";
+                        option.textContent = "هیچ غذایی با ظرفیت فروشی موجود نیست.";
+                        option.disabled = true;
+                        directSaleForm.foodType.appendChild(option);
+                    }
+                    updateDirectSaleButtonState();
+                } catch (error) {
+                    console.error('خطا در بارگذاری لیست غذاها:', error);
+                }
+            }
+
+            function updateDirectSaleButtonState() {
+                const customerName = directSaleForm.customerName.value.trim();
+                const phoneNumber = directSaleForm.phoneNumber.value.trim();
+                const selectedFoodOption = directSaleForm.foodType.options[directSaleForm.foodType.selectedIndex];
+                const foodIdSelected = selectedFoodOption && selectedFoodOption.value && !selectedFoodOption.disabled;
+                const remainingCapacity = foodIdSelected ? parseInt(selectedFoodOption.dataset.remainingCapacity || '0', 10) : 0;
+                const requestedQuantity = parseInt(directSaleForm.quantityInput.value);
+
+                const canRegister = customerName && phoneNumber && foodIdSelected &&
+                                    !isNaN(requestedQuantity) && requestedQuantity > 0 &&
+                                    requestedQuantity <= remainingCapacity;
+
+                directSaleForm.registerButton.disabled = !canRegister;
+            }
+
+            async function loadRecentActivities() {
+                try {
+                    const activities = await fetchData(`${BASE_API_URL}/activities/recent/`);
+                    activitiesTableBody.innerHTML = '';
+                    if (activities.length === 0) {
+                        const row = activitiesTableBody.insertRow();
+                        row.innerHTML = `<td colspan="5">هنوز فعالیتی ثبت نشده است.</td>`;
+                        return;
+                    }
+                    activities.forEach(activity => {
+                        const row = activitiesTableBody.insertRow();
+                        const dateObj = new Date(activity.timestamp);
+                        // نمایش تاریخ و ساعت
+                        const date = new Intl.DateTimeFormat('fa-IR', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(dateObj);
+                        const time = dateObj.toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit', hour12: false });
+
+                        const transactionTypeDisplay = activity.transaction_type_display || activity.transaction_type;
+
+                        row.innerHTML = `
+                            <td>${date}</td>
+                            <td>${activity.customer_name || 'ناشناس'}</td>
+                            <td>${activity.food_item_name || 'نامشخص'}</td>
+                            <td>${activity.quantity}</td>
+                            <td><span class="badge ${activity.transaction_type === 'direct_sale' ? 'sale-badge' : 'token-badge'}">${transactionTypeDisplay}</span></td>
+                        `;
+                    });
+                } catch (error) {
+                    console.error('خطا در بارگذاری فعالیت‌های اخیر:', error);
+                }
+            }
+
+            function showModal(type, message) {
+                if (type === 'success') {
+                    successMessage.textContent = message;
+                    successModal.classList.add('show');
+                    errorModal.classList.remove('show');
+                } else if (type === 'error') {
+                    errorMessage.textContent = message;
+                    errorModal.classList.add('show');
+                    successModal.classList.remove('show');
+                }
+            }
+
+            function closeModal() {
+                successModal.classList.remove('show');
+                errorModal.classList.remove('show');
+            }
+
+            // --- گوش‌دهنده‌های رویداد ---
+
+            tabs.directSaleTab.addEventListener('click', () => {
+                tabs.directSaleTab.classList.add('active');
+                tabs.tokenDeliveryTab.classList.remove('active');
+                tabs.directSalePanel.classList.add('active');
+                tabs.tokenDeliveryPanel.classList.remove('active');
+                updateDashboard();
+                loadRecentActivities();
+                loadFoodItems();
+            });
+
+            tabs.tokenDeliveryTab.addEventListener('click', () => {
+                tabs.tokenDeliveryTab.classList.add('active');
+                tabs.directSaleTab.classList.remove('active');
+                tabs.tokenDeliveryPanel.classList.add('active');
+                tabs.directSalePanel.classList.remove('active');
+                tokenDeliveryForm.detailsSection.style.display = 'none';
+                tokenDeliveryForm.tokenNumberInput.value = '';
+                tokenDeliveryForm.currentCouponCode = null;
+                updateDashboard();
+                loadRecentActivities();
+            });
+
+            directSaleForm.quantityMinus.addEventListener('click', () => {
+                let current = parseInt(directSaleForm.quantityInput.value);
+                if (current > 1) {
+                    directSaleForm.quantityInput.value = current - 1;
+                }
+                updateDirectSaleButtonState();
+            });
+
+            directSaleForm.quantityPlus.addEventListener('click', () => {
+                let current = parseInt(directSaleForm.quantityInput.value);
+                directSaleForm.quantityInput.value = current + 1;
+                updateDirectSaleButtonState();
+            });
+
+            directSaleForm.foodType.addEventListener('change', updateDirectSaleButtonState);
+            directSaleForm.quantityInput.addEventListener('input', updateDirectSaleButtonState);
+            directSaleForm.customerName.addEventListener('input', updateDirectSaleButtonState);
+            directSaleForm.phoneNumber.addEventListener('input', updateDirectSaleButtonState);
+
+
+            directSaleForm.registerButton.addEventListener('click', async () => {
+                const customerName = directSaleForm.customerName.value.trim();
+                const phoneNumber = directSaleForm.phoneNumber.value.trim();
+                const selectedFoodOption = directSaleForm.foodType.options[directSaleForm.foodType.selectedIndex];
+                const foodItemId = selectedFoodOption.value;
+                const quantity = parseInt(directSaleForm.quantityInput.value);
+                const remainingCapacity = parseInt(selectedFoodOption.dataset.remainingCapacity || '0', 10);
+
+                if (!customerName || !phoneNumber || !foodItemId || isNaN(quantity) || quantity <= 0) {
+                    showModal('error', 'لطفا تمامی فیلدها را پر کنید.');
+                    return;
+                }
+                if (quantity > remainingCapacity) {
+                    showModal('error', `تعداد درخواستی (${quantity}) بیشتر از ظرفیت باقی‌مانده (${remainingCapacity}) برای این غذا است.`);
+                    return;
+                }
+
+                try {
+                    const result = await postData(`${BASE_API_URL}/sales/direct/`, {
+                        customer_name: customerName,
+                        phone_number: phoneNumber,
+                        food_id: foodItemId,
+                        quantity: quantity,
+                    });
+                    showModal('success', result.message);
+                    updateDashboard();
+                    loadRecentActivities();
+                    directSaleForm.customerName.value = '';
+                    directSaleForm.phoneNumber.value = '';
+                    directSaleForm.foodType.value = '';
+                    directSaleForm.quantityInput.value = '1';
+                    loadFoodItems();
+
+                } catch (error) {
+                    console.error('خطا در ثبت فروش:', error);
+                }
+            });
+
+            tokenDeliveryForm.searchButton.addEventListener('click', async () => {
+                const couponCode = tokenDeliveryForm.tokenNumberInput.value.trim();
+                if (!couponCode) {
+                    showModal('error', 'لطفا کد ژتون را وارد کنید.');
+                    return;
+                }
+
+                try {
+                    const couponData = await postData(`${BASE_API_URL}/tokens/lookup/`, {
+                        coupon_code: couponCode
+                    });
+
+                    tokenDeliveryForm.customerName.textContent = couponData.family_name || 'نامشخص';
+                    tokenDeliveryForm.phoneNumber.textContent = couponData.phone_number || 'نامشخص';
+                    tokenDeliveryForm.foodType.textContent = couponData.food_name || 'نامشخص';
+                    tokenDeliveryForm.quantity.textContent = couponData.count;
+                    tokenDeliveryForm.detailsSection.style.display = 'block';
+                    tokenDeliveryForm.currentCouponCode = couponCode;
+
+                } catch (error) {
+                    tokenDeliveryForm.detailsSection.style.display = 'none';
+                    tokenDeliveryForm.currentCouponCode = null;
+                }
+            });
+
+            tokenDeliveryForm.confirmButton.addEventListener('click', async () => {
+                const couponCode = tokenDeliveryForm.currentCouponCode;
+                if (!couponCode) {
+                    showModal('error', 'لطفا ابتدا ژتون را جستجو کنید.');
+                    return;
+                }
+
+                try {
+                    const result = await postData(`${BASE_API_URL}/tokens/redeem/`, {
+                        coupon_code: couponCode,
+                    });
+                    showModal('success', result.message);
+                    updateDashboard();
+                    loadRecentActivities();
+                    tokenDeliveryForm.tokenNumberInput.value = '';
+                    tokenDeliveryForm.detailsSection.style.display = 'none';
+                    tokenDeliveryForm.currentCouponCode = null;
+
+                } catch (error) {
+                    console.error('خطا در تایید تحویل ژتون:', error);
+                }
+            });
+
+            closeButtons.forEach(button => {
+                button.addEventListener('click', closeModal);
+            });
+
+            window.addEventListener('click', (event) => {
+                if (event.target === successModal || event.target === errorModal) {
+                    closeModal();
+                }
+            });
+
+            // --- تابع خروج ---
+            if (logoutButton) {
+                logoutButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.cookie = 'kitchen_user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                    window.location.href = '/';
+                });
+            }
+
+            // --- بارگذاری اولیه ---
+            updateDashboard();
+            loadFoodItems();
+            loadRecentActivities();
+        });
+    </script>
+</body>
+</html>

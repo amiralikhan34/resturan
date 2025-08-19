@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت آشپزخانه</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jalaali-js/dist/jalaali.js"></script>
+
+    <style>
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+            direction: rtl;
+            text-align: right;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background-color: #ff8c00;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 600;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-left {
+            font-size: 16px;
+            font-weight: 400;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .header-left span.main-kitchen-link {
+            background-color: #e67d00;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .header-left span.main-kitchen-link:hover {
+            background-color: #cc7000;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .logout-button {
+            background-color: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .logout-button:hover {
+            background-color: #c82333;
+        }
+
+        /* Tabs */
+        .tabs {
+            background-color: #fcfcfc;
+            padding: 10px 20px;
+            display: flex;
+            border-bottom: 1px solid #e0e0e0;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            box-shadow: inset 0 -1px 5px rgba(0,0,0,0.03);
+        }
+
+        .tab-button {
+            background-color: transparent;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Vazirmatn', sans-serif;
+            color: #666;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab-button:hover {
+            color: #ff8c00;
+            background-color: #fffaf0;
+        }
+
+        .tab-button.active {
+            color: #ff8c00;
+            border-color: #ff8c00;
+            font-weight: 600;
+            background-color: #ffffff;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .section-header h3 {
+            margin: 0;
+            color: #333;
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .add-button {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+        }
+
+        .add-button:hover {
+            background-color: #218838;
+        }
+
+        .search-bar {
+            margin-bottom: 25px;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar input, .search-bar select {
+            width: 350px;
+            padding: 12px 15px;
+            padding-right: 40px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: 'Vazirmatn', sans-serif;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            transition: border-color 0.2s ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-color: #fff;
+        }
+        .search-bar input:focus, .search-bar select:focus {
+            outline: none;
+            border-color: #ff8c00;
+            box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
+        }
+        .search-bar::before {
+            content: '🔍';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 18px;
+            pointer-events: none;
+        }
+        .search-bar.has-select::before {
+            content: '';
+        }
+        .search-bar.has-select::after {
+            content: '▼';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            pointer-events: none;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        table th, table td {
+            border-bottom: 1px solid #eee;
+            padding: 15px 20px;
+            text-align: right;
+            font-size: 15px;
+            vertical-align: middle; /* Added for alignment */
+        }
+
+        table th {
+            background-color: #f9f9f9;
+            font-weight: 600;
+            color: #555;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+        table th:first-child { border-top-right-radius: 8px; }
+        table th:last-child { border-top-left-radius: 8px; }
+
+        table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+        /* New styles for row selection */
+        #weeklyProgramTable tbody tr {
+            cursor: pointer;
+        }
+        #weeklyProgramTable tbody tr.selected-for-print {
+            background-color: #fff3cd !important;
+            color: #664d03;
+            font-weight: 600;
+        }
+
+
+        .action-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            margin: 0 8px;
+            padding: 0;
+            transition: transform 0.2s ease;
+            vertical-align: middle;
+        }
+        .edit-cooking-amount-button {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: 'Vazirmatn', sans-serif;
+            transition: background-color 0.2s ease;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .edit-cooking-amount-button:hover {
+            background-color: #0056b3;
+        }
+
+
+        .action-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .edit-button {
+            color: #007bff;
+        }
+        .edit-button:hover {
+            color: #0056b3;
+        }
+
+        .delete-button {
+            color: #dc3545;
+        }
+        .delete-button:hover {
+            color: #c82333;
+        }
+
+        .view-materials-button {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: 'Vazirmatn', sans-serif;
+            transition: background-color 0.2s ease;
+        }
+
+        .view-materials-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-badge.sufficient {
+            background-color: #e6ffe6;
+            color: #28a745;
+        }
+
+        .status-badge.low {
+            background-color: #fff3cd;
+            color: #ffc107;
+        }
+
+        .status-badge.critical {
+            background-color: #ffe6e6;
+            color: #dc3545;
+        }
+        .status-badge.expired {
+            background-color: #f7e6ff;
+            color: #8a2be2;
+        }
+
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Weekly Program specific styles */
+        .weekly-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 15px;
+        }
+        .weekly-nav button {
+            background-color: #ff8c00;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 15px;
+            transition: background-color 0.2s ease;
+        }
+        .weekly-nav button:hover {
+            background-color: #e67d00;
+        }
+        .weekly-nav span {
+            font-size: 18px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        /* Kitchen Program Specific Styles */
+        .kitchen-program-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .task-column {
+            background-color: #fcfcfc;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+        }
+        .task-column h4 {
+            margin-top: 0;
+            color: #444;
+            font-size: 18px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: #444;
+        }
+        .task-item input[type="checkbox"] {
+            transform: scale(1.3);
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .task-item label {
+            cursor: pointer;
+        }
+        .task-item span.time {
+            font-weight: 600;
+            color: #ff8c00;
+        }
+        .kitchen-program-date-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #555;
+        }
+        .kitchen-program-date-nav button {
+            background-color: #eee;
+            border: 1px solid #ddd;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+        .kitchen-program-date-nav button.active,
+        .kitchen-program-date-nav button:hover {
+            background-color: #ff8c00;
+            color: white;
+            border-color: #ff8c00;
+        }
+        .kitchen-program-date-nav .current-date-display {
+            background-color: #ff8c00;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .food-serving-table-title {
+            margin-top: 30px;
+            font-size: 22px;
+            font-weight: 600;
+            color: #333;
+        }
+        .food-serving-table {
+            margin-top: 15px;
+        }
+        .food-serving-table .status-badge {
+             padding: 4px 8px;
+             font-size: 12px;
+        }
+        .food-serving-table .status-badge.in-progress {
+            background-color: #e0f7fa;
+            color: #00bcd4;
+        }
+        .food-serving-table .status-badge.completed {
+            background-color: #e6ffe6;
+            color: #28a745;
+        }
+        .modal-content {
+            width: 100% !important;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #dee2e6;
+            padding: 1rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+
+        .modal-body {
+            padding: 1rem 1rem;
+            position: relative;
+            flex: 1 1 auto;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            padding: 1rem;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .modal-header .btn-close {
+            margin: -0.5rem -0.5rem -0.5rem auto;
+        }
+
+        .modal-content .form-select {
+            display: block;
+            width: 100%;
+            padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #212529;
+            background-color: #fff;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: left 0.75rem center;
+            background-size: 16px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            direction: rtl;
+            padding-right: 0.75rem;
+            padding-left: 2.25rem;
+            background-position: left 0.75rem center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-button {
+            color: #aaa;
+            float: left;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            position: absolute;
+            top: 15px;
+            left: 20px;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #666;
+            text-decoration: none;
+        }
+        /* Bootstrap modal conflict fix */
+        .modal {
+            z-index: 1055 !important;
+        }
+        .modal-backdrop {
+            z-index: 1050 !important;
+        }
+
+
+        .modal-content h2 {
+            margin-top: 0;
+            color: #333;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .modal-body table {
+            margin-top: 0;
+            box-shadow: none;
+            border: 1px solid #eee;
+        }
+        .modal-body table th, .modal-body table td {
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+
+        .modal-close-btn {
+            background-color: #6c757d;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Vazirmatn', sans-serif;
+            margin-top: 30px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            transition: background-color 0.2s ease;
+        }
+
+        .modal-close-btn:hover {
+            background-color: #5a6268;
+        }
+
+        /* Form styling within modals */
+        .modal-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+            font-size: 15px;
+        }
+        .modal-form input[type="text"],
+        .modal-form input[type="time"],
+        .modal-form input[type="date"],
+        .modal-form select,
+        .modal-form input[type="number"],
+        .modal-form textarea {
+            width: calc(100% - 24px);
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        .modal-form textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .modal-form button[type="submit"] {
+            background-color: #ff8c00;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Vazirmatn', sans-serif;
+            transition: background-color 0.2s ease;
+            margin-top: 15px;
+        }
+        .modal-form button[type="submit"]:hover {
+            background-color: #e67d00;
+        }
+        .modal-form .form-group {
+            margin-bottom: 15px;
+        }
+        .material-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .material-input-group input {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        .material-input-group button.remove-material-btn {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 0 5px;
+            align-self: center;
+            transition: color 0.2s ease;
+        }
+        .material-input-group button.remove-material-btn:hover {
+            color: #c82333;
+        }
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0;
+                border-radius: 0;
+                box-shadow: none;
+            }
+            body {
+                padding: 0;
+            }
+            .header {
+                font-size: 20px;
+                padding: 15px 20px;
+                border-radius: 0;
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 10px;
+            }
+            .header-left {
+                font-size: 14px;
+                gap: 10px;
+            }
+            .tabs {
+                padding: 8px 10px;
+            }
+            .tab-button {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+            .main-content {
+                padding: 20px 15px;
+            }
+            .section-header {
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 15px;
+            }
+            .section-header h3 {
+                font-size: 20px;
+            }
+            .add-button {
+                width: 100%;
+                justify-content: center;
+            }
+            .search-bar input, .search-bar select {
+                width: 100%;
+                padding-left: 15px;
+                padding-right: 40px;
+                box-sizing: border-box;
+            }
+            .search-bar::before {
+                left: 15px;
+                right: auto;
+            }
+            table th, table td {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+            .action-button {
+                font-size: 16px;
+                margin: 0 4px;
+            }
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+            .close-button {
+                font-size: 28px;
+                top: 10px;
+                left: 15px;
+            }
+            .modal-content h2 {
+                font-size: 20px;
+                margin-bottom: 20px;
+            }
+            .weekly-nav, .kitchen-program-date-nav {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .weekly-nav button, .kitchen-program-date-nav button {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+            .kitchen-program-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-form input[type="text"],
+            .modal-form input[type="time"],
+            .modal-form input[type="date"],
+            .modal-form select,
+            .modal-form input[type="number"],
+            .modal-form textarea {
+                width: 100%;
+            }
+            .material-input-group {
+                flex-wrap: wrap;
+            }
+            .material-input-group input {
+                flex-basis: calc(50% - 15px);
+            }
+            .material-input-group input:last-of-type {
+                flex-basis: calc(100% - 15px);
+            }
+            .material-input-group button.remove-material-btn {
+                flex-basis: 100%;
+                justify-content: center;
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="header-right">
+            <span>پنل مدیریت آشپزخانه</span>
+            <a href="/" <button id="logoutButton" class="logout-button">خروج</button></a>
+        </div>
+        <div class="header-left">
+            <span class="main-kitchen-link">آشپزخانه مرکزی</span>
+            <span id="currentHeaderDate">{{ today|date:"Y/m/d" }}</span>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="tabs">
+            <button class="tab-button" data-tab="bom">BOM غذا</button>
+            <button class="tab-button active" data-tab="kitchen-program">برنامه آشپزخانه</button>
+            <button class="tab-button" data-tab="kitchen-inventory">انبار آشپزخانه</button>
+            <button class="tab-button" data-tab="warehouse-inventory">موجودی انبار</button>
+        </div>
+
+        <div id="bom" class="tab-content">
+            <div class="section-header">
+                <h3>لیست مواد اولیه غذاها (BOM)</h3>
+            </div>
+            <div class="search-bar has-select" style="width: 100%; max-width: 400px; margin-bottom: 25px;">
+            <label for="bomFoodFilter" class="form-label visually-hidden">انتخاب غذا برای مشاهده BOM:</label>
+            <select id="bomFoodFilter" class="form-select">
+                <option value="">-- نمایش همه غذاها --</option>
+                {% for food in foods3 %}
+                    <option value="{{ food.name }}">{{ food.name }}</option>
+                {% endfor %}
+            </select>
+            </div>
+            <table id="bomTable">
+                <thead>
+                <tr>
+                    <th>نام غذا</th>
+                    <th>مواد اولیه</th>
+                    <th>زمان آماده‌سازی</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for food in foods3 %}
+                    <tr>
+                        <td>{{ food.name }}</td>
+                        <td>
+                            {% for bom in food.foodrawmaterial_set.all %}
+                                {{ bom.raw_material.name }} ({{ bom.quantity_needed }} {{ bom.raw_material.unit_of_measurement }}){% if not forloop.last %}, {% endif %}
+                            {% empty %}
+                                -
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% if food.preparation_time_minutes %}
+                                {{ food.preparation_time_minutes }} دقیقه
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="3">هیچ غذایی ثبت نشده.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div id="kitchen-program" class="tab-content active">
+            <div class="section-header">
+                <h3>برنامه آشپزخانه</h3>
+                <div>
+                    <button class="add-button" id="printScheduleBtn" style="background-color: #6c757d; margin-left: 10px;">
+                         پرینت برنامه
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="kitchen-program-date-nav">
+                <button id="prevPeriodBtn">قبلی</button>
+                <button id="todayBtn">امروز</button>
+                <span class="current-date-display" id="currentKitchenProgramDisplay">
+                    {{ current_jalali_date }}
+                </span>
+                <button id="nextPeriodBtn">بعدی</button>
+                <select id="kitchenProgramViewFilter" class="form-select" style="width: auto;">
+                    <option value="daily" {% if view_type == 'daily' %}selected{% endif %}>روزانه</option>
+                    <option value="weekly" {% if view_type == 'weekly' %}selected{% endif %}>هفتگی</option>
+                    <option value="monthly" {% if view_type == 'monthly' %}selected{% endif %}>ماهانه</option>
+                </select>
+            </div>
+
+            <h4 class="food-serving-table-title" style="margin-top: 20px;">برنامه غذایی</h4>
+            <p style="font-size: 14px; color: #666;">برای پرینت، لطفاً یک ردیف از جدول زیر را انتخاب کنید.</p>
+            <table id="weeklyProgramTable" class="food-serving-table table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>روز هفته</th>
+                        <th>تاریخ</th>
+                        <th>غذای اصلی</th>
+                        <th>وعده</th>
+                        <th>دسر</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for schedule in foods2 %}
+                    <tr data-food-id="{{ schedule.id }}">
+                        <td>{{ schedule.persian_day_of_week }}</td>
+                        <td class="gregorian-date">{{ schedule.schedule_date|date:"Y-m-d" }}</td>
+                        <td>{{ schedule.food.name }}</td>
+                        <td>{{ schedule.get_meal_time_display }}</td>
+                        <td>-</td>
+                        <td>
+                            {% if schedule.is_finished %}
+                                <span style="color: green;">تمام شده</span>
+                            {% else %}
+                                <a href="{% url 'delTask' schedule.id %}">اتمام</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">برنامه‌ای برای این دوره یافت نشد.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <h4 class="food-serving-table-title" style="margin-top: 30px;">برنامه سرو و طبخ غذا (برنامه هفتگی)</h4>
+            <table class="food-serving-table table table-striped table-bordered" id="weeklyScheduleDisplayTable">
+                <thead>
+                    <tr>
+                        <th>عنوان</th>
+                        <th>تاریخ</th>
+                        <th>وعده</th>
+                        <th>ظرفیت حضرتی</th>
+                        <th>ظرفیت فروشی</th>
+                        <th>مقدار طبخ</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in WSh %}
+                    <tr>
+                        <td>{{ item.food }}</td>
+                        <td class="gregorian-date">{{ item.schedule_date|date:"Y-m-d" }}</td>
+                        <td>{{ item.get_meal_time_display }}</td>
+                        <td>{{ item.capacity_nazry|default:"-" }}</td>
+                        <td>{{ item.capacity_foroshi|default:"-" }}</td>
+                        <td>{{ item.cooking_amount|default:"-" }}</td>
+                        <td>
+
+                            {% if item.is_finished %}
+                                <span style="color: green;">تمام شده</span>
+                            {% else %}
+                                <a href="{% url 'delTask' item.pk %}">اتمام</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">برنامه‌ای برای این دوره یافت نشد.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div id="kitchen-inventory" class="tab-content">
+            <div class="section-header">
+                <h3>موجودی انبار آشپزخانه</h3>
+                <button class="add-button btn btn-primary" data-bs-toggle="modal" data-bs-target="#rawMaterialModal">
+                  تحویل از انبار
+                </button>
+
+                <div class="modal fade" id="rawMaterialModal" tabindex="-1" aria-labelledby="rawMaterialModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <form class="modal-content" method="post" action="{% url 'raw_material_create' %}">
+                      {% csrf_token %}
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="rawMaterialModalLabel">درخواست از انبار اصلی</h5>
+                        <button type="button" class="btn-close ms-0" data-bs-dismiss="modal" aria-label="بستن"></button>
+                      </div>
+
+                      <div class="modal-body">
+                        <div class="mb-3">
+                          <label class="form-label" for="requestMaterialName">نام ماده</label>
+                          <select class="form-select" id="requestMaterialName" name="name" required>
+                            <option value="" data-unit="" data-coding="">-- یک ماده انتخاب کنید --</option>
+                            {% for material in raw_materials %}
+                                <option value="{{ material.name }}" data-unit="{{ material.unit_of_measurement }}" data-coding="{{ material.coding }}">{{ material.name }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+
+                        <div class="mb-3">
+                          <label class="form-label" for="requestQuantity">مقدار</label>
+                          <input type="number" step="1" class="form-control" id="requestQuantity" name="quantity" required />
+                        </div>
+
+                        <div class="mb-3">
+                          <label class="form-label" for="requestUnit">واحد</label>
+                          <input type="text" class="form-control" id="requestUnit" name="unit" readonly style="background-color: #e9ecef;" />
+                        </div>
+
+                        <div class="mb-3">
+                          <label class="form-label" for="requestCoding">کدینگ</label>
+                          <input type="text" class="form-control" id="requestCoding" name="coding" readonly style="background-color: #e9ecef;" />
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">بستن</button>
+                        <button type="submit" class="btn btn-primary">ثبت</button>
+                      </div>
+                      </form>
+                  </div>
+                </div>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="kitchenInventorySearchInput" placeholder="جستجو بر اساس نام یا محل نگهداری...">
+            </div>
+
+            <table id="kitchenInventoryTable">
+                <thead>
+                <tr>
+                    <th>نام ماده</th>
+                    <th>مقدار</th>
+                    <th>واحد</th>
+                    <th>تاریخ ثبت</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in rwmat %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.unit }}</td>
+                        <td>{{ item.created_at|date:"Y/m/d H:i" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="4">موجودی ثبت نشده است</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div id="warehouse-inventory" class="tab-content">
+            <div class="section-header">
+                <h3>موجودی انبار اصلی</h3>
+            </div>
+            <table id="warehouseInventoryTable">
+                <thead>
+                    <tr>
+                        <th>نام ماده</th>
+                        <th>دسته‌بندی</th>
+
+                        <th>واحد</th>
+                        <th>کدینگ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in rw_mater %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.category|default:"-" }}</td>
+
+                        <td>{{ item.unit_of_measurement }}</td>
+                        <td>{{ item.coding|default:"-" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="5">موجودی ثبت نشده است</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{# Other modals remain unchanged #}
+<div class="modal fade" id="cookAmountModal" tabindex="-1"
+     aria-labelledby="cookAmountModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" id="cookAmountForm" action="">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        <div class="modal-header">
+          <h5 class="modal-title" id="cookAmountModalLabel">ویرایش مقدار طبخ غذا</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="بستن"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="cookAmountInput" class="form-label">مقدار جدید:</label>
+            <input type="text"
+                   class="form-control"
+                   id="cookAmountInput"
+                   name="cooking_amount"
+                   placeholder="مثلا 130 پرس" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+          <button type="submit" class="btn btn-success">ذخیره</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+</body>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jalaali-js/dist/jalaali.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- ابزارهای کمکی ---
+
+            // تبدیل تاریخ گرگوری (میلادی) به رشته شمسی
+            const convertGregorianToJalali = (dateString) => {
+                if (!dateString || !dateString.includes('-')) return dateString;
+                try {
+                    const [year, month, day] = dateString.split('-').map(Number);
+                    if (isNaN(year) || isNaN(month) || isNaN(day)) return dateString;
+                    const jalaliDate = jalaali.toJalaali(year, month, day);
+                    const jy = jalaliDate.jy;
+                    const jm = String(jalaliDate.jm).padStart(2, '0');
+                    const jd = String(jalaliDate.jd).padStart(2, '0');
+                    return `${jy}/${jm}/${jd}`;
+                } catch (e) {
+                    console.error("Error converting date:", dateString, e);
+                    return dateString; // در صورت خطا، رشته اصلی را برگردان
+                }
+            };
+
+            // تبدیل یک شیء Date به رشته میلادی YYYY-MM-DD
+            const getGregorianDateString = (dateObj) => {
+                const year = dateObj.getFullYear();
+                const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+                const day = dateObj.getDate().toString().padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+
+
+            // --- اجرای اولیه در زمان بارگذاری صفحه ---
+
+            // تبدیل تمام تاریخ‌های میلادی در جداول به شمسی
+            document.querySelectorAll('.gregorian-date').forEach(cell => {
+                cell.textContent = convertGregorianToJalali(cell.textContent.trim());
+            });
+
+            // --- منطق تب‌ها ---
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            const activateTab = (tabId) => {
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                const activeButton = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
+                if (activeButton) activeButton.classList.add('active');
+                const activeContent = document.getElementById(tabId);
+                if (activeContent) activeContent.classList.add('active');
+            };
+
+             tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    activateTab(button.dataset.tab);
+                });
+            });
+
+            // فعال‌سازی تب اولیه
+            activateTab('kitchen-program');
+
+
+            // --- منطق فیلتر و ناوبری برنامه آشپزخانه ---
+
+            const urlParams = new URLSearchParams(window.location.search);
+            // اگر پارامترها در URL وجود دارند، از آنها استفاده کن، در غیر این صورت از مقادیر پیش‌فرض استفاده کن
+            const currentViewType = urlParams.get('view_type') || 'daily';
+            const currentDateStr = urlParams.get('date') || getGregorianDateString(new Date());
+
+            // تابع برای بارگذاری مجدد صفحه با پارامترهای جدید
+            const navigate = (view, dateStr) => {
+                const currentUrl = new URL(window.location.href);
+                currentUrl.searchParams.set('view_type', view);
+                currentUrl.searchParams.set('date', dateStr);
+                window.location.href = currentUrl.href;
+            };
+
+            // تنظیم مقدار اولیه فیلتر
+            const viewFilter = document.getElementById('kitchenProgramViewFilter');
+            if (viewFilter) viewFilter.value = currentViewType;
+
+            // رویدادهای ناوبری
+            viewFilter.addEventListener('change', (e) => {
+                navigate(e.target.value, currentDateStr);
+            });
+
+            document.getElementById('todayBtn').addEventListener('click', () => {
+                navigate(currentViewType, getGregorianDateString(new Date()));
+            });
+
+            document.getElementById('prevPeriodBtn').addEventListener('click', () => {
+                let currentDate = new Date(currentDateStr);
+                if (currentViewType === 'daily') currentDate.setDate(currentDate.getDate() - 1);
+                else if (currentViewType === 'weekly') currentDate.setDate(currentDate.getDate() - 7);
+                else if (currentViewType === 'monthly') currentDate.setMonth(currentDate.getMonth() - 1);
+                navigate(currentViewType, getGregorianDateString(currentDate));
+            });
+
+            document.getElementById('nextPeriodBtn').addEventListener('click', () => {
+                let currentDate = new Date(currentDateStr);
+                if (currentViewType === 'daily') currentDate.setDate(currentDate.getDate() + 1);
+                else if (currentViewType === 'weekly') currentDate.setDate(currentDate.getDate() + 7);
+                else if (currentViewType === 'monthly') currentDate.setMonth(currentDate.getMonth() + 1);
+                navigate(currentViewType, getGregorianDateString(currentDate));
+            });
+
+            // --- منطق پرینت برنامه غذایی ---
+            const weeklyProgramTableBody = document.querySelector("#weeklyProgramTable tbody");
+            if (weeklyProgramTableBody) {
+                weeklyProgramTableBody.addEventListener('click', (event) => {
+                    const clickedRow = event.target.closest('tr');
+                    if (!clickedRow) return;
+
+                    weeklyProgramTableBody.querySelectorAll('tr.selected-for-print').forEach(row => {
+                        if (row !== clickedRow) row.classList.remove('selected-for-print');
+                    });
+
+                    clickedRow.classList.toggle('selected-for-print');
+                });
+            }
+
+            const printScheduleBtn = document.getElementById('printScheduleBtn');
+            if (printScheduleBtn) {
+                printScheduleBtn.addEventListener('click', () => {
+                    const selectedRow = document.querySelector("#weeklyProgramTable tr.selected-for-print");
+                    if (!selectedRow) {
+                        alert("لطفاً ابتدا یک برنامه غذایی را از جدول برای پرینت انتخاب کنید.");
+                        return;
+                    }
+                    const foodId = selectedRow.dataset.foodId;
+                    if (foodId) {
+                        const printUrl = `print-program/${foodId}/`;
+                        window.open(printUrl, '_blank');
+                    } else {
+                        alert("خطا: شناسه غذا برای پرینت یافت نشد.");
+                    }
+                });
+            }
+
+            // --- منطق فیلتر جدول BOM ---
+            const bomFoodFilter = document.getElementById('bomFoodFilter');
+            const bomTable = document.getElementById('bomTable');
+            const bomTableRows = bomTable ? bomTable.querySelectorAll('tbody tr') : [];
+
+            const filterBomTable = () => {
+                const selectedFood = bomFoodFilter.value;
+                bomTableRows.forEach(row => {
+                    const foodName = row.cells[0].textContent.trim();
+                    if (selectedFood === "" || foodName === selectedFood) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+                });
+            };
+
+            if (bomFoodFilter) {
+                bomFoodFilter.addEventListener('change', filterBomTable);
+            }
+
+            // --- منطق مودال تحویل از انبار (کد جدید) ---
+            const materialSelect = document.getElementById('requestMaterialName');
+            const unitInput = document.getElementById('requestUnit');
+            const codingInput = document.getElementById('requestCoding');
+            const quantityInput = document.getElementById('requestQuantity');
+
+            if (materialSelect && unitInput && codingInput && quantityInput) {
+                materialSelect.addEventListener('change', (e) => {
+                    const selectedOption = e.target.options[e.target.selectedIndex];
+                    const unit = selectedOption.dataset.unit || '';
+                    const coding = selectedOption.dataset.coding || '';
+
+                    unitInput.value = unit;
+                    codingInput.value = coding;
+
+                    if (e.target.value) {
+                        quantityInput.focus();
+                    } else {
+                        quantityInput.value = '';
+                    }
+                });
+            }
+        });
+    </script>
+</html>
